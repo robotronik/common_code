@@ -1,0 +1,7 @@
+*.o
+asser_robot
+asser_robot.*
+*~
+.*~
+*.swp
+.*.swp
