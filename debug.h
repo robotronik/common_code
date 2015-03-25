@@ -41,7 +41,7 @@
         debug("x:%x",c);                  \
         debug("\t");                      \
         debug("c:%c", (c==0)? '0': c);    \
-        debug("\n", c);                   \
+        debug("\n");                   \
     } while(0)
 
 //////////////
