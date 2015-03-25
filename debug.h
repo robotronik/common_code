@@ -8,6 +8,10 @@
  * Si 'DEBUG' est non défini ou nul, alors les macros suivantes sont sans effet
  */
 
+//////////
+#if !DEBUG
+//////////
+
 /** Affiche un message de debug
  * \note s'utilise comme printf
  */
@@ -20,9 +24,9 @@
  */
 #define debug_byte(byte)
 
-/////////
-#if DEBUG
-/////////
+//////////////
+#else // DEBUG
+//////////////
 
 #include "stdio.h"
 
