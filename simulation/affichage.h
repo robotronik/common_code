@@ -22,9 +22,7 @@ int sdl_manage_events();
 int quit_sdl_screen();
 
 // Drawing functions
-void dessine_fond();
-
-void dessine_robot(int x, int y, int alpha);
+void bouge_robot_sdl(int x, int y, int alpha);
 
 void dessine_obstacle_rond(int cx, int cy, int r);
 void dessine_obstacle_ligne(int x1, int y1, int x2, int y2);
@@ -33,3 +31,5 @@ void dessine_point_passage_carto(int x, int y, int type);
 
 void dessin_init();
 void dessin_post();
+
+void new_xy_absolu(int, int);

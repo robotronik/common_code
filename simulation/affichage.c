@@ -3,8 +3,6 @@
 #include <GL/glu.h>
 #include <SOIL/SOIL.h>
 #include <math.h>
-#include "cartographie.h"
-#include "asservissement.h"
 #include "affichage.h"
 
 SDL_Event evenements;
@@ -24,16 +22,14 @@ int init_sdl_screen() {
     // Changer de repère : repère orthogonal avec origine bas-gauche
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0,PLATEAU_WIDTH,0,PLATEAU_HEIGHT);
+    gluOrtho2D(0, PLATEAU_WIDTH, 0, PLATEAU_HEIGHT);
 
     // Texture : plateau de jeu
     texturePlateau = SOIL_load_OGL_texture(IMAGE_PLATEAU,
         SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-
 #if DEBUG
     printf("SOIL messages : '%s' (%s)\n", SOIL_last_result(), IMAGE_PLATEAU);
 #endif
-
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, texturePlateau);
@@ -50,13 +46,12 @@ int sdl_manage_events() {
 #if DEBUG
                 printf("%d %d\n", evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
 #endif
-                nouvelle_etape(evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
+                new_xy_absolu(evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
             }
         default:
             return 0;
     }
 }
-
 
 int quit_sdl_screen(int erreur) {
     if (erreur != 0)
@@ -67,9 +62,12 @@ int quit_sdl_screen(int erreur) {
 }
 
 
+void dessin_post() {
+    glFlush();
+    SDL_GL_SwapBuffers(); // Mise à jour de l'écran
+}
+
 void dessine_fond() {
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity( );
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS);
         glColor3ub(255,255,255);
@@ -80,14 +78,7 @@ void dessine_fond() {
     glEnd();
 }
 
-void dessine_robot(int x, int y, int alpha_mrad) {
-    float alpha_deg = alpha_mrad * MRAD2DEGRES;
-#if DEBUG
-    printf("x = %d, y = %d, alpha = %f\n", x, y, alpha_deg);
-#endif
-
-    glTranslated(x, y, 0);
-    glRotatef(alpha_deg, 0, 0, 1);
+void dessine_robot() {
     glDisable(GL_TEXTURE_2D);
     glBegin(GL_QUADS);
         glColor3ub(0,0,255);
@@ -110,9 +101,24 @@ void dessine_robot(int x, int y, int alpha_mrad) {
         //glColor3ub(0,0,0);
         glVertex2d(0, 0);
     glEnd();
-    dessin_post();
 }
 
+void bouge_robot_sdl(int x, int y, int alpha) {
+    float alpha_deg = alpha * MRAD2DEGRES;
+#if DEBUG
+    printf("x = %d, y = %d, alpha = %f\n",
+            x,      y,      alpha_deg);
+#endif
+    // Remplissage de la surface avec du noir
+    glClear(GL_COLOR_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    dessine_fond();
+    glTranslated(x, y, 0);
+    glRotatef(alpha_deg, 0, 0, 1);
+    dessine_robot();
+    dessin_post();
+}
 
 void dessine_obstacle_rond(int cx, int cy, int r){
     glMatrixMode( GL_MODELVIEW );
@@ -182,12 +188,3 @@ void dessine_point_passage_carto(int x, int y, int type) {
     dessin_post();
 }
 
-void dessin_init() {
-    // Remplissage de la surface avec du noir
-    glClear(GL_COLOR_BUFFER_BIT);
-}
-
-void dessin_post() {
-    glFlush();
-    SDL_GL_SwapBuffers(); // Mise à jour de l'écran
-}
