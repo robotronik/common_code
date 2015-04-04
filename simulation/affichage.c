@@ -27,9 +27,9 @@ int init_sdl_screen() {
     // Texture : plateau de jeu
     texturePlateau = SOIL_load_OGL_texture(IMAGE_PLATEAU,
         SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-#if DEBUG
+    #if DEBUG
     printf("SOIL messages : '%s' (%s)\n", SOIL_last_result(), IMAGE_PLATEAU);
-#endif
+    #endif
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, texturePlateau);
@@ -43,9 +43,9 @@ int sdl_manage_events() {
             return 1;
         case SDL_MOUSEBUTTONDOWN: case SDL_MOUSEMOTION: // Clic de la souris
             if (evenements.button.button == SDL_BUTTON_LEFT) {
-#if DEBUG
+                #if DEBUG
                 printf("%d %d\n", evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
-#endif
+                #endif
                 new_xy_absolu(evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
             }
         default:
@@ -105,10 +105,10 @@ void dessine_robot() {
 
 void bouge_robot_sdl(int x, int y, int alpha) {
     float alpha_deg = alpha * MRAD2DEGRES;
-#if DEBUG
+    #if DEBUG
     printf("x = %d, y = %d, alpha = %f\n",
             x,      y,      alpha_deg);
-#endif
+    #endif
     // Remplissage de la surface avec du noir
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -159,19 +159,22 @@ void dessine_obstacle_ligne(int x1, int y1,int x2, int y2) {
 }
 
 void dessine_point_passage_carto(int x, int y, int type) {
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity( );
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     glTranslated(x, y, 0);
 
     switch (type) {
-        case 0:
-            glColor3ub(128,128,128);
+        case 0: // Point ouvert
+            glColor3ub(0,128,128);
             break;
-        case 1:
-            glColor3ub(0,255,0);
+        case 1: // Point visité
+            glColor3ub(0,255,255);
             break;
-        case 2:
+        case 2: // Point de passage réel
             glColor3ub(255,0,0);
+            break;
+        case 3: // Point borne
+            glColor3ub(0,255,0);
             break;
         default:
             glColor3ub(0,0,0);

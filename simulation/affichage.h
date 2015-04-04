@@ -11,7 +11,7 @@
 #define ROBOT_WIDTH  230
 
 #define POINT_SIZE 40
-#define PRECISION_CERCLE 1
+#define PRECISION_CERCLE 8
 
 #define IMAGE_PLATEAU "simulation/plateau.png"
 
@@ -22,6 +22,8 @@ int sdl_manage_events();
 int quit_sdl_screen();
 
 // Drawing functions
+void dessine_fond();
+
 void bouge_robot_sdl(int x, int y, int alpha);
 
 void dessine_obstacle_rond(int cx, int cy, int r);
