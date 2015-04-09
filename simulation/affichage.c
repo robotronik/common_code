@@ -3,7 +3,9 @@
 #include <GL/glu.h>
 #include <SOIL/SOIL.h>
 #include <math.h>
+
 #include "../debug.h"
+
 #include "affichage.h"
 
 SDL_Event evenements;
@@ -28,7 +30,7 @@ int init_sdl_screen() {
     // Texture : plateau de jeu
     texturePlateau = SOIL_load_OGL_texture(IMAGE_PLATEAU,
         SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-    debug("SOIL messages : '%s' (%s)\n", SOIL_last_result(), IMAGE_PLATEAU);
+    debug_lvl3("SOIL messages : '%s' (%s)\n", SOIL_last_result(), IMAGE_PLATEAU);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, texturePlateau);
@@ -42,7 +44,7 @@ int sdl_manage_events() {
             return 1;
         case SDL_MOUSEBUTTONDOWN: case SDL_MOUSEMOTION: // Clic de la souris
             if (evenements.button.button == SDL_BUTTON_LEFT) {
-                debug("%d %d\n", evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
+                debug_lvl3("%d %d\n", evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
                 new_xy_absolu(evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
             }
         default:
@@ -103,8 +105,7 @@ void dessine_robot() {
 
 void bouge_robot_sdl(int x, int y, int alpha) {
     float alpha_deg = alpha * MRAD2DEGRES;
-    debug("x = %d, y = %d, alpha = %f\n",
-            x,      y,      alpha_deg);
+    debug_lvl3("x = %d, y = %d, alpha = %f\n", x, y, alpha_deg);
     // Remplissage de la surface avec du noir
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
