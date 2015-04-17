@@ -13,7 +13,7 @@
 #define POINT_SIZE 40
 #define PRECISION_CERCLE 8
 
-#define IMAGE_PLATEAU "simulation/plateau.png"
+#define IMAGE_PLATEAU "../common_code/simulation/plateau.png"
 
 // SDL basic functions
 int init_sdl_screen();

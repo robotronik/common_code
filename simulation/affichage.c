@@ -3,6 +3,7 @@
 #include <GL/glu.h>
 #include <SOIL/SOIL.h>
 #include <math.h>
+#include "../debug.h"
 #include "affichage.h"
 
 SDL_Event evenements;
@@ -27,9 +28,7 @@ int init_sdl_screen() {
     // Texture : plateau de jeu
     texturePlateau = SOIL_load_OGL_texture(IMAGE_PLATEAU,
         SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-    #if DEBUG
-    printf("SOIL messages : '%s' (%s)\n", SOIL_last_result(), IMAGE_PLATEAU);
-    #endif
+    debug("SOIL messages : '%s' (%s)\n", SOIL_last_result(), IMAGE_PLATEAU);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, texturePlateau);
@@ -43,9 +42,7 @@ int sdl_manage_events() {
             return 1;
         case SDL_MOUSEBUTTONDOWN: case SDL_MOUSEMOTION: // Clic de la souris
             if (evenements.button.button == SDL_BUTTON_LEFT) {
-                #if DEBUG
-                printf("%d %d\n", evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
-                #endif
+                debug("%d %d\n", evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
                 new_xy_absolu(evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
             }
         default:
@@ -55,7 +52,7 @@ int sdl_manage_events() {
 
 int quit_sdl_screen(int erreur) {
     if (erreur != 0)
-        printf("Erreur lors de la creation de la fenetre : ,%s",SDL_GetError());
+        debug("Erreur lors de la creation de la fenetre : ,%s",SDL_GetError());
 
     SDL_Quit();
     return -1;
@@ -105,10 +102,8 @@ void dessine_robot() {
 
 void bouge_robot_sdl(int x, int y, int alpha) {
     float alpha_deg = alpha * MRAD2DEGRES;
-    #if DEBUG
-    printf("x = %d, y = %d, alpha = %f\n",
+    debug("x = %d, y = %d, alpha = %f\n",
             x,      y,      alpha_deg);
-    #endif
     // Remplissage de la surface avec du noir
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
