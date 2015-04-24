@@ -9,14 +9,14 @@
 
 /* UTILISATION
  *
- * En emmission les fonctions standard d'emmission de texte sont utilisable
+ * En émission les fonctions standard d'émission de texte sont utilisables
  * (printf entre autre). Par conséquent, il est très simple de vérifier que les
- * message sont correctement transmis en utilisant les outils standards UNIX.
+ * messages sont correctement transmis en utilisant les outils standards UNIX.
  *
- * En lecture, des primitives sont fournis dans le fichiers ci-dessous pour
+ * En lecture, des primitives sont fournies dans le fichier ci-dessous pour
  * faciliter le découpage du texte.
  *
- * La gestion des espaces blancs (espace, tabs, …) est laissé à l'utilisateur.
+ * La gestion des espaces blancs (espace, tabs, …) est laissée à l'utilisateur.
  */
 
 /* Il est conseillé d'utiliser le schéma suivant:
