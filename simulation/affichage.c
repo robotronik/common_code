@@ -51,8 +51,9 @@ int sdl_manage_events() {
 }
 
 int quit_sdl_screen(int erreur) {
-    if (erreur != 0)
+    if (erreur != 0) {
         debug("Erreur lors de la creation de la fenetre : ,%s",SDL_GetError());
+    }
 
     SDL_Quit();
     return -1;
