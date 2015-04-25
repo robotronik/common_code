@@ -6,6 +6,7 @@
  * Ce header contient des macro de debug.
  * Pour les activer, il faut definir 'DEBUG' à une valeur non nulle
  * Si 'DEBUG' est non défini ou nul, alors les macros suivantes sont sans effet
+ * Mettre une valeur élevé augmente le niveau de débug
  */
 
 //////////
@@ -47,5 +48,23 @@
 //////////////
 #endif // DEBUG
 //////////////
+
+#if DEBUG >= 1
+#define debug_lvl1(...) debug(__VA_ARGS__)
+#else
+#define debug_lvl1(...)
+#endif
+
+#if DEBUG >= 2
+#define debug_lvl2(...) debug(__VA_ARGS__)
+#else
+#define debug_lvl2(...)
+#endif
+
+#if DEBUG >= 3
+#define debug_lvl3(...) debug(__VA_ARGS__)
+#else
+#define debug_lvl3(...)
+#endif
 
 #endif /* DEBUG_H */
