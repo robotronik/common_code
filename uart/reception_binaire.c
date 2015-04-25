@@ -16,7 +16,7 @@ void lire_uart()
     // Vrai si le caractère courant est à échaper
     static bool escape_char = false;
 
-    debug("STATE : %d\n", g_communication.state);
+    debug(1, "STATE : %d\n", g_communication.state);
 
     // Contient le dernier caractère reçu.
     // L'écriture dans le buffer g_communication.data est différé, car le crc
@@ -27,13 +27,13 @@ void lire_uart()
 
     // lecture des données en provenance de l'uart
     uint8_t uart_buff = get_uart();
-    debug("data : ");
+    debug(1, "data : ");
     debug_byte(uart_buff);
 
     switch (g_communication.state) {
         case PRET:
 
-            debug("RECEPTION (debut)\n");
+            debug(1, "RECEPTION (debut)\n");
 
             // initialisation
             g_communication.used_size = 0;
@@ -45,17 +45,17 @@ void lire_uart()
 
             // fin de trame
             if (uart_buff=='\0' && !escape_char) {
-                debug("FIN DE TRAME\n");
+                debug(1, "FIN DE TRAME\n");
                 // À ce stade, si la reception s'est bien passé, alors on viens
                 // de recevoir le crc
                 if (crc == 0) {
                     g_communication.state = RECU;
                 } else {
-                    debug("CRC ERREUR\n");
+                    debug(1, "CRC ERREUR\n");
                     debug_byte(crc);
                     debug_byte(uart_buff);
                     debug_byte(last_char);
-                    debug("\n");
+                    debug(1, "\n");
                     g_communication.state = ERREUR;
                 }
                 break;
@@ -63,8 +63,8 @@ void lire_uart()
 
             // On s'assure que la trame n'est pas trop grande
             if (g_communication.used_size >= g_communication.data_size) {
-                debug("ERREUR : trame trop grande\n");
-                debug("%d au lieu de %d\n", g_communication.used_size,
+                debug(1, "ERREUR : trame trop grande\n");
+                debug(1, "%d au lieu de %d\n", g_communication.used_size,
                         g_communication.data_size);
                 g_communication.state = ERREUR;
                 break;
@@ -75,7 +75,7 @@ void lire_uart()
 
             // caractère d'échapement
             if (uart_buff == '\\' && !escape_char) {
-                debug("CARACTÈRE ÉCHAPÉ\n");
+                debug(1, "CARACTÈRE ÉCHAPÉ\n");
                 escape_char = true;
                 break;
             }
@@ -97,10 +97,10 @@ void lire_uart()
         case RECU:
         default:
             // On ignore les données tant que le système n'est pas pret à les recevoir
-            debug("ERREUR : %d\n", g_communication.state);
+            debug(1, "ERREUR : %d\n", g_communication.state);
             break;
     }
 
-    debug("STATE FIN : %d\n", g_communication.state);
+    debug(1, "STATE FIN : %d\n", g_communication.state);
 }
 

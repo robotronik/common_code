@@ -32,15 +32,15 @@ int main(void)
     uart_send_msg(msg1,  sizeof(msg1));
     uart_send_msg(msg2,  sizeof(msg2));
     uart_send_msg(&msg3, sizeof(msg3));
-    debug("msg envoyé:\n");
+    debug(1, "msg envoyé:\n");
     extern uint8_t buf[50];
     for (unsigned i = 0; i < sizeof(buf); i++) {
         debug_byte(buf[i]);
     }
 
-    debug("\n");
-    debug("FIN TRANSMISSION\n");
-    debug("\n");
+    debug(1, "\n");
+    debug(1, "FIN TRANSMISSION\n");
+    debug(1, "\n");
 
     // Dans un premier temps on utilise buf1
     g_communication.data = buf1;
@@ -55,13 +55,13 @@ int main(void)
     }
 
     // On vérifie que le message est bien reçu
-    debug("\n");
-    debug("MSG1 %.*s\n", sizeof(msg1), msg1);
-    debug("BUF1 %.*s\n", sizeof(buf1), buf1);
+    debug(1, "\n");
+    debug(1, "MSG1 %.*s\n", sizeof(msg1), msg1);
+    debug(1, "BUF1 %.*s\n", sizeof(buf1), buf1);
     for (unsigned i = 0; i < sizeof(buf1); i++) {
         debug_byte(buf1[i]);
     }
-    debug("\n");
+    debug(1, "\n");
     /*assert(!strncmp(msg1, buf1, sizeof(msg1 - 1)));*/
 
     // buf1 est plein, maintenant, on utilise buf2
@@ -75,27 +75,27 @@ int main(void)
     lire_uart();
 
     // On peut faire un travail sur buf1, pendant que buf2 se remplis…
-    debug("\n");
-    debug("lecture de buf1 pendant que l'on remplis buf2\n");
-    debug("BUF1 %.*s\n", sizeof(buf1), buf1);
-    debug("\n");
+    debug(1, "\n");
+    debug(1, "lecture de buf1 pendant que l'on remplis buf2\n");
+    debug(1, "BUF1 %.*s\n", sizeof(buf1), buf1);
+    debug(1, "\n");
 
     // On attend de recevoir des données
     while(g_communication.state != RECU) {
         lire_uart();
     }
 
-    debug("\n");
-    debug("BUF2 %.*s\n", sizeof(buf2), buf2);
-    debug("MSG2 %.*s\n", sizeof(msg2), msg2);
-    debug("BUF2 %.*s\n", sizeof(buf2), buf2);
+    debug(1, "\n");
+    debug(1, "BUF2 %.*s\n", sizeof(buf2), buf2);
+    debug(1, "MSG2 %.*s\n", sizeof(msg2), msg2);
+    debug(1, "BUF2 %.*s\n", sizeof(buf2), buf2);
     for (unsigned i = 0; i < sizeof(buf2); i++) {
         debug_byte(buf2[i]);
     }
-    debug("\n");
+    debug(1, "\n");
 
     // On transmet la dernière trame
-    debug("sizeof(msg3) sizeof(buf3)%d\n", sizeof(msg3), sizeof(buf3));
+    debug(1, "sizeof(msg3) sizeof(buf3)%d\n", sizeof(msg3), sizeof(buf3));
     g_communication.data = (uint8_t*) &buf3;
     g_communication.data_size = sizeof(buf3);
     g_communication.state = PRET;
@@ -104,10 +104,10 @@ int main(void)
         lire_uart();
     }
 
-    debug("\n");
-    debug("BUF3 :\n");
-    debug("type : %d\n", buf3.type);
-    debug("point1 : %d %d\n", buf3.point[0].x, buf3.point[0].y);
-    debug("point2 : %d %d\n", buf3.point[1].x, buf3.point[1].y);
-    debug("point3 : %d %d\n", buf3.point[2].x, buf3.point[2].y);
+    debug(1, "\n");
+    debug(1, "BUF3 :\n");
+    debug(1, "type : %d\n", buf3.type);
+    debug(1, "point1 : %d %d\n", buf3.point[0].x, buf3.point[0].y);
+    debug(1, "point2 : %d %d\n", buf3.point[1].x, buf3.point[1].y);
+    debug(1, "point3 : %d %d\n", buf3.point[2].x, buf3.point[2].y);
 }
