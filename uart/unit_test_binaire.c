@@ -5,7 +5,7 @@
 
 #include "reception.h"
 #include "emission.h"
-#include "../common_code/common.h"
+#include "../common.h"
 
 /* Test unitaire permettant de valider le protocole binaire */
 

@@ -2,7 +2,7 @@
 #include "stdbool.h"
 #include "stdio.h"
 
-#include "../common_code/common.h"
+#include "../common.h"
 
 #include "reception_binaire.h"
 #include "uart_hardware.h"
