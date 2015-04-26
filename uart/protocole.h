@@ -6,7 +6,12 @@
 // Envoi de coordonnées
 #define UART_KEY_ENVOIE_X "x=%d"
 #define UART_KEY_ENVOIE_Y "y=%d"
+#define UART_KEY_ENVOIE_ALPHA "alpha=%d"
+#define UART_KEY_ENVOIE_DELTA "delta=%d"
+#define UART_KEY_ENVOIE_THETA "theta=%d"
 void uart_trame_builder_append_envoie_coordonnees(int x, int y);
+void uart_trame_builder_append_envoie_alphadelta(int alpha, int delta);
+void uart_trame_builder_append_envoie_theta(int theta);
 
 // Envoi d'un point au milieu d'un chemin
 #define UART_KEY_POINT_DANS_CHEMIN  "POINT_DANS_CHEMIN"
