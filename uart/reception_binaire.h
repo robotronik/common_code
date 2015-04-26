@@ -1,7 +1,7 @@
 #ifndef RECEPTION_H
 #define RECEPTION_H
 
-#include "inttypes.h"
+#include "../inttypes.h"
 
 /* ================================= */
 /* PROTOCOLE DE TRANSMISSION BINAIRE */
