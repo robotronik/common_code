@@ -1,5 +1,5 @@
 #include "uart_hardware.h"
-#include "../common_code/common.h"
+#include "../common.h"
 
 #include "stdint.h"
 uint8_t buf[50];

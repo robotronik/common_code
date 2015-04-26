@@ -1,4 +1,4 @@
-#include "../common_code/common.h"
+#include "../common.h"
 
 #include "emission_binaire.h"
 #include "uart_hardware.h"
