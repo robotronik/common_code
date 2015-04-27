@@ -15,16 +15,16 @@ char* uart_trame_builder_get_string() {
 }
 
 
-void uart_trame_builder_append_envoie_coordonnees(int x, int y) {
-    add_to_buffer_with_args(UART_KEY_ENVOIE_X, x);
-    add_to_buffer_with_args(UART_KEY_ENVOIE_Y, y);
+void uart_trame_builder_append_coordonnees(int x, int y) {
+    add_to_buffer_with_args(UART_KEY_X, x);
+    add_to_buffer_with_args(UART_KEY_Y, y);
 }
-void uart_trame_builder_append_envoie_alphadelta(int alpha, int delta) {
-    add_to_buffer_with_args(UART_KEY_ENVOIE_ALPHA, alpha);
-    add_to_buffer_with_args(UART_KEY_ENVOIE_DELTA, delta);
+void uart_trame_builder_append_alphadelta(int alpha, int delta) {
+    add_to_buffer_with_args(UART_KEY_ALPHA, alpha);
+    add_to_buffer_with_args(UART_KEY_DELTA, delta);
 }
-void uart_trame_builder_append_envoie_theta(int theta) {
-    add_to_buffer_with_args(UART_KEY_ENVOIE_THETA, theta);
+void uart_trame_builder_append_theta(int theta) {
+    add_to_buffer_with_args(UART_KEY_THETA, theta);
 }
 
 
