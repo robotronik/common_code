@@ -1,7 +1,7 @@
-#include "protocole.h"
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "protocole_uart.h"
+#include "uart_emission.h"
 char buffer_envoi[256];
 
 #define add_to_buffer_with_integer(string, value) sprintf(buffer_envoi, "%s%s%d\n", buffer_envoi, string, value)
