@@ -4,11 +4,11 @@
 /* ================================= */
 
 // Envoi de coordonnées
-#define UART_KEY_X "x=%d"
-#define UART_KEY_Y "y=%d"
-#define UART_KEY_ALPHA "alpha=%d"
-#define UART_KEY_DELTA "delta=%d"
-#define UART_KEY_THETA "theta=%d"
+#define UART_KEY_X "x="
+#define UART_KEY_Y "y="
+#define UART_KEY_ALPHA "alpha="
+#define UART_KEY_DELTA "delta="
+#define UART_KEY_THETA "theta="
 
 // Gestion des chemins de points
 #define UART_KEY_POINT_DANS_CHEMIN  "POINT_DANS_CHEMIN"
@@ -66,43 +66,3 @@ void uart_trame_builder_append_stop_urgence();
 
 // "Feedback" de l'asser à la stratégie
 void uart_trame_builder_append_position_atteinte();
-
-
-//*************** API de réception :
-/* Les fonctions sont déclarées ici MAIS à implémenter en tant que callbacks
- * dans chaque projet.
- * On peut bien sûr implémenter des fonctions vides, si on ne veut pas
- * gérer certains messages ! ;)
-
- (Quoi, moi, influencé par le java ? Noooooooon…)
- */
-
-// Réception de coordonnées
-void uart_received_coordonnees(int x, int y);
-void uart_received_alphadelta(int alpha, int delta);
-void uart_received_theta(int theta);
-
-// Gestion des chemins de points
-void uart_received_nouveau_point_dans_chemin();
-void uart_received_execute_le_chemin();
-
-// Déplacements classiques
-void uart_received_mouvement_xy_absolu();
-void uart_received_mouvement_xy_relatif();
-
-// Tour sur soi-même, par exemple
-void uart_received_mouvement_alphadelta();
-void uart_received_mouvement_alpha();
-void uart_received_mouvement_delta();
-void uart_received_mouvement_theta();
-
-// Modes de déplacement
-void uart_received_mode_tendu();
-void uart_received_mode_courbe();
-void uart_received_stop_normal();
-void uart_received_stop_urgence();
-
-
-// "Feedback" de l'asser à la stratégie
-void uart_received_position_atteinte();
-

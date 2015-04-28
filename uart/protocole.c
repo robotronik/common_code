@@ -4,7 +4,7 @@
 #include <stdlib.h>
 char buffer_envoi[256];
 
-#define add_to_buffer_with_args(format,...) sprintf(buffer_envoi, "%s" format "\n", buffer_envoi, __VA_ARGS__)
+#define add_to_buffer_with_integer(string, value) sprintf(buffer_envoi, "%s%s%d\n", buffer_envoi, string, value)
 #define add_to_buffer(string) sprintf(buffer_envoi, "%s%s\n", buffer_envoi, string)
 
 void uart_trame_builder_init() {
@@ -16,15 +16,15 @@ char* uart_trame_builder_get_string() {
 
 
 void uart_trame_builder_append_coordonnees(int x, int y) {
-    add_to_buffer_with_args(UART_KEY_X, x);
-    add_to_buffer_with_args(UART_KEY_Y, y);
+    add_to_buffer_with_integer(UART_KEY_X, x);
+    add_to_buffer_with_integer(UART_KEY_Y, y);
 }
 void uart_trame_builder_append_alphadelta(int alpha, int delta) {
-    add_to_buffer_with_args(UART_KEY_ALPHA, alpha);
-    add_to_buffer_with_args(UART_KEY_DELTA, delta);
+    add_to_buffer_with_integer(UART_KEY_ALPHA, alpha);
+    add_to_buffer_with_integer(UART_KEY_DELTA, delta);
 }
 void uart_trame_builder_append_theta(int theta) {
-    add_to_buffer_with_args(UART_KEY_THETA, theta);
+    add_to_buffer_with_integer(UART_KEY_THETA, theta);
 }
 
 
