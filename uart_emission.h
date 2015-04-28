@@ -3,7 +3,7 @@
 // Utilitaires : (ré)Initialisation du buffer, etc
 void uart_trame_builder_init();
 char* uart_trame_builder_get_string();
-
+void uart_trame_builder_send_string();
 // Envoi de coordonnées
 void uart_trame_builder_append_coordonnees(int x, int y);
 void uart_trame_builder_append_alphadelta(int alpha, int delta);
