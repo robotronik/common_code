@@ -40,10 +40,10 @@
  */
 #define debug_byte(level, byte)     \
     do {                            \
-        char c = byte;              \
+        unsigned char uc = byte;    \
         debug(level,                \
             "d:%d\tx:%x\tc:%c\n",   \
-             c, c, (c==0)? '0': c); \
+         uc, uc, (uc==0)? '0': uc); \
     } while(0)
 
 //////////////
