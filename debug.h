@@ -14,13 +14,18 @@
  * 2 : Warn (\TODOs ?)
  * 3 : Debug
  * 4 : Verbose
+ *
+ * De plus, la macro info() permet d'afficher des informations en sortie du
+ * programme (sur stderr)
  */
+
+#include "stdio.h"
+
+#define info(...) fprintf(stderr, __VA_ARGS__)
 
 //////////
 #if DEBUG
 //////////
-
-#include "stdio.h"
 
 /** Affiche un message de debug
  *  Accepte n'importe quelle valeur de level
