@@ -8,7 +8,6 @@
  *
  * On peut se fixer des normes de niveaux :
  *
- * Valeurs négatives : pour "être tranquille" pour un test
  * 0 : Désactivation totale du débug.
  * 1 : Error
  * 2 : Warn (\TODOs ?)
@@ -26,6 +25,10 @@
  */
 
 #include "stdio.h"
+
+#if DEBUG < 0
+#error Attention, pour desactiver le DEBUG, il faut mettre DEBUG a 0
+#endif
 
 #define info(...) fprintf(stderr, __VA_ARGS__)
 
