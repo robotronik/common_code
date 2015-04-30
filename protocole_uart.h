@@ -1,3 +1,5 @@
+#ifndef PROTOCOLE_UART_H
+#define PROTOCOLE_UART_H
 
 /* ================================= */
 /* PROTOCOLE DE TRANSMISSION TEXTE   */
@@ -30,3 +32,5 @@
 
 #define UART_KEY_STOP_NORMAL    "STOP_NORMAL"
 #define UART_KEY_STOP_URGENCE   "STOP_URGENCE"
+
+#endif //PROTOCOLE_UART_H
