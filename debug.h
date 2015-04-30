@@ -33,8 +33,8 @@
  */
 #define debug(level, ...)       \
     if(level <= DEBUG) {        \
-        printf("%d\t",level);    \
-        printf(__VA_ARGS__);    \
+        fprintf(stderr, "%d\t",level);    \
+        fprintf(stderr, __VA_ARGS__);    \
     }
 
 
