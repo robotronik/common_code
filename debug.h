@@ -6,7 +6,8 @@
  * Ce header contient des macro de debug.
  * On utilise un debug à plusieurs niveaux.
  *
- * On peut se fixer des normes de niveaux :
+ * On peut se fixer des normes de niveaux : (cf la liste de define au début de
+ * ce fichier)
  *
  * 0 : Désactivation totale du débug.
  * 1 : Error
@@ -29,6 +30,12 @@
 #if DEBUG < 0
 #error Attention, pour desactiver le DEBUG, il faut mettre DEBUG a 0
 #endif
+
+#define _OFF_     0
+#define _ERROR_   1
+#define _WARNING_ 2
+#define _DEBUG_   3
+#define _VERBOSE_ 4
 
 #define info(...) fprintf(stderr, __VA_ARGS__)
 
