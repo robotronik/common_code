@@ -45,3 +45,8 @@ void uart_trame_builder_append_mode_courbe()                 { add_to_buffer(UAR
 
 void uart_trame_builder_append_stop_normal()                 { add_to_buffer(UART_KEY_STOP_NORMAL);         }
 void uart_trame_builder_append_stop_urgence()                { add_to_buffer(UART_KEY_STOP_URGENCE);        }
+
+void uart_trame_builder_append_calibration_position()        { add_to_buffer(UART_KEY_CALIBRATION);         }
+void uart_trame_builder_append_where_are_you()               { add_to_buffer(UART_KEY_WERE_ARE_YOU);        }
+void uart_trame_builder_append_i_am_here()                   { add_to_buffer(UART_KEY_I_AM_HERE);           }
+void uart_trame_builder_append_finished_i_am_bored()         { add_to_buffer(UART_KEY_FINISHED_I_AM_BORED); }

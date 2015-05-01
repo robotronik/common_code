@@ -32,3 +32,8 @@ void uart_trame_builder_append_stop_urgence();
 
 // "Feedback" de l'asser à la stratégie
 void uart_trame_builder_append_position_atteinte();
+
+void uart_trame_builder_append_calibration_position();
+void uart_trame_builder_append_where_are_you();
+void uart_trame_builder_append_i_am_here();
+void uart_trame_builder_append_finished_i_am_bored();
