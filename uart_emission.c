@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "../stm32f407/headers/main.h"
 #include "debug.h"
 #include "protocole_uart.h"
 #include "uart_emission.h"
