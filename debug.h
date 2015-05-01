@@ -31,7 +31,7 @@
 #error Attention, pour desactiver le DEBUG, il faut mettre DEBUG a 0
 #endif
 
-#define _OFF_     0
+#define _ALWAYS_  0
 #define _ERROR_   1
 #define _WARNING_ 2
 #define _DEBUG_   3
