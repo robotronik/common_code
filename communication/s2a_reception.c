@@ -1,6 +1,5 @@
 #include "../debug.h"
 
-#include "../../asservissement/communication.h"
 #include "../../asservissement/match.h"
 #include "../../asservissement/odometrie.h"
 #include "../../asservissement/trajectoire.h"
@@ -41,10 +40,10 @@ static char *s2a_keys_help[S2A_SIZE] = {
     [S2A_CMD_QUIT]         = "quitter la simulation",
     [S2A_CMD_HELP]         = "affiche l'aide",
 
-    [S2A_FCT_ALPHA_DELTA]  = "new_alpha_delta(alpha, delta)",
-    [S2A_FCT_XY_RELATIF]   = "new_xy_relatif(x,y)",
-    [S2A_FCT_XY_ABSOLU]    = "new_xy_absolu(x,y)",
-    [S2A_FCT_THETA]        = "new_theta(theta)",
+    [S2A_FCT_ALPHA_DELTA]  = "set_trajectoire_alpha_delta(alpha, delta)",
+    [S2A_FCT_XY_RELATIF]   = "set_trajectoire_xy_relatif(x,y)",
+    [S2A_FCT_XY_ABSOLU]    = "set_trajectoire_xy_absolu(x,y)",
+    [S2A_FCT_THETA]        = "set_trajectoire_theta(theta)",
     [S2A_FCT_ADD]          = "Ajoute les points x et y dans le prochain chemin",
     [S2A_FCT_CLEAR]        = "Efface le chemin en cours de construction",
     [S2A_FCT_CHEMIN]       = "Envoie le chemin précédemment construit",
@@ -254,26 +253,26 @@ void s2a_lecture_message(char current_char)
                         break;
 
                     case S2A_FCT_ALPHA_DELTA:
-                        debug(_DEBUG_, "new_alpha_delta(%d, %d);\n", alpha, delta);
-                        new_alpha_delta(alpha, delta);
+                        debug(_DEBUG_, "set_trajectoire_alpha_delta(%d, %d);\n", alpha, delta);
+                        set_trajectoire_alpha_delta(alpha, delta);
                         current_state = S2A_WAIT_NEW_LINE;
                         break;
 
                     case S2A_FCT_XY_RELATIF:
-                        debug(_DEBUG_, "new_xy_relatif(%d, %d);\n", x, y);
-                        new_xy_relatif(x, y);
+                        debug(_DEBUG_, "set_trajectoire_xy_relatif(%d, %d);\n", x, y);
+                        set_trajectoire_xy_relatif(x, y);
                         current_state = S2A_WAIT_NEW_LINE;
                         break;
 
                     case S2A_FCT_XY_ABSOLU:
-                        debug(_DEBUG_, "new_xy_absolu(%d, %d);\n", x, y);
-                        new_xy_absolu(x, y);
+                        debug(_DEBUG_, "set_trajectoire_xy_absolu(%d, %d);\n", x, y);
+                        set_trajectoire_xy_absolu(x, y);
                         current_state = S2A_WAIT_NEW_LINE;
                         break;
 
                     case S2A_FCT_THETA:
-                        debug(_DEBUG_, "new_theta(%d);\n", theta);
-                        new_theta(theta);
+                        debug(_DEBUG_, "set_trajectoire_theta(%d);\n", theta);
+                        set_trajectoire_theta(theta);
                         current_state = S2A_WAIT_NEW_LINE;
                         break;
 
