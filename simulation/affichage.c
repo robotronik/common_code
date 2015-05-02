@@ -6,6 +6,8 @@
 
 #include "../debug.h"
 
+#include "../../asservissement/trajectoire.h"
+
 #include "affichage.h"
 
 SDL_Event evenements;
@@ -45,7 +47,7 @@ int sdl_manage_events() {
         case SDL_MOUSEBUTTONDOWN: case SDL_MOUSEMOTION: // Clic de la souris
             if (evenements.button.button == SDL_BUTTON_LEFT) {
                 debug(3, "%d %d\n", evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
-                new_xy_absolu(evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
+                set_trajectoire_xy_absolu(evenements.button.x*ZOOM_FACTOR, PLATEAU_HEIGHT - evenements.button.y*ZOOM_FACTOR);
             }
         default:
             return 0;
