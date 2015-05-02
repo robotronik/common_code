@@ -4,8 +4,8 @@
 #     DEBUG: 0, 1, 2, 3, 4
 #
 # Cibles :
-#    all: comm_assert et comm_strategie
-#    comm_assert: toute ce qui est en liens à la communication de la partie
+#    all: comm_asser et comm_strategie
+#    comm_asser: toute ce qui est en liens à la communication de la partie
 #            asservissement
 #    comm_strategie: toute ce qui est en liens à la communication de la partie
 #            stratégie
@@ -14,7 +14,7 @@
 # Options
 export ARCH  = PC
 export ROBOT = gros
-export DEBUG = 2
+export DEBUG = _WARNING_
 
 # Constantes de compilation
 
@@ -94,77 +94,64 @@ endif
 
 # Cibles du projet
 FICHIERS_H   = $(FICHIERS_C:.c=.h) $(COMMON_H)
-FICHIERS_O  += $(FICHIERS_C:.c=.o)
 SOURCEFILES += $(FICHIERS_C) $(FICHIERS_H)
 
+# dossier de compilation
+BUILDIR = build
+OBJDIR = $(BUILDIR)/$(ARCH)/$(DEBUG)
 
-.PHONY: flash run demo mrproper clean
+# Liste des fichiers sans prefix
+COMM_ASSER_FILE =  a2s_emmission a2s internal_reception text_reception s2a_reception s2a
+COMM_STRATEGIE_FILE = a2s a2s_reception internal_reception text_reception s2a_emmission s2a
 
 default: all
 
 ################################################################################
 
-# Exécution pour le PIC.
-ifeq ($(ARCH), PIC)
-$(PIC_HEX):$(PIC_ELF)
-	/opt/xc16-toolchain-bin/bin/xc16-bin2hex $^ -a -omf=elf
-
-flash:$(PIC_HEX)
-	pk2cmd -P -M -F$(PIC_HEX) -J -T
-endif
-
-# Exécution pour le PC.
-ifeq ($(ARCH), PC)
-run: all
-	./$(EXEC)
-
-demo: $(EXEC)
-	sh ./slow_read.sh demo.txt | ./$(EXEC)
-endif
-
-################################################################################
-
 # Compilation
 
-all: comm_assert comm_strategie
+all: comm_asser comm_strategie
 
-comm_assert: a2s_emmission.o a2s.o internal_reception.o text_reception.o s2a_reception.o s2a.o
+comm_asser: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_ASSER_FILE)))
 
-comm_strategie: a2s.o a2s_reception.o internal_reception.o text_reception.o s2a_emmission.o s2a.o
+comm_strategie: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_STRATEGIE_FILE)))
 
-a2s_emmission.o: a2s.h ../debug.h
+$(OBJDIR)/a2s_emmission.o: a2s.h ../debug.h
 
-a2s_reception.o: a2s.h internal_reception.h text_reception.h ../debug.h
+$(OBJDIR)/a2s_reception.o: a2s.h internal_reception.h text_reception.h ../debug.h
 
-a2s.o: a2s.h
+$(OBJDIR)/a2s.o: a2s.h
 
-a2s_emmission.o: a2s.h a2s_emmission.h ../debug.h
+$(OBJDIR)/a2s_emmission.o: a2s.h a2s_emmission.h ../debug.h
 
-a2s_reception.o: a2s.h a2s_reception.h internal_reception.h text_reception.h ../debug.h
+$(OBJDIR)/a2s_reception.o: a2s.h a2s_reception.h internal_reception.h text_reception.h ../debug.h
 
-s2a.o: s2a.h
+$(OBJDIR)/s2a.o: s2a.h
 
-s2a_emmission.o: s2a.h s2a_emmission.h ../debug.h
+$(OBJDIR)/s2a_emmission.o: s2a.h s2a_emmission.h ../debug.h
 
-s2a_reception.o: s2a.h s2a_emmission.h ../debug.h ../../asservissement/trajectoire.h
+$(OBJDIR)/s2a_reception.o: s2a.h s2a_emmission.h ../debug.h ../../asservissement/trajectoire.h
 
-internal_reception.o: internal_reception.h
+$(OBJDIR)/internal_reception.o: internal_reception.h
 
-text_reception.o: text_reception.h ../debug.h
+$(OBJDIR)/text_reception.o: text_reception.h ../debug.h
 
-%.o: %.c %h
+$(OBJDIR)/%.o: %.c %.h | $(OBJDIR)
 	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(OBJDIR):
+	mkdir $(OBJDIR) -p
 
 ################################################################################
 
 # Cibles génériques
-.PHONY:tarall clean mrproper
+.PHONY: tarall clean mrproper
 
 tarall: $(SOURCEFILES)
 	tar -jcvf $(EXEC).tar.bz2 $^
 
 clean:
-	rm -f $(FICHIERS_O)
+	find $(BUILDIR) -name '*.o' -delete 2>/dev/null && rmdir -p --ignore-fail-on-non-empty $(BUILDIR)/*/* || true
 
 mrproper: clean
 	rm -rf $(EXEC) $(PIC_ELF) $(PIC_HEX) $(EXEC).tar.bz2
