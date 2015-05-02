@@ -340,19 +340,19 @@ void s2a_lecture_message(char current_char)
         ////////////////////
 
         case S2A_WAIT_X:
-            current_char = lecture_val(current_char, &sk, &x, current_state);
+            current_state = lecture_val(current_char, &sk, &x, current_state);
             break;
         case S2A_WAIT_Y:
-            current_char = lecture_val(current_char, &sk, &y, current_state);
+            current_state = lecture_val(current_char, &sk, &y, current_state);
             break;
         case S2A_WAIT_ALPHA:
-            current_char = lecture_val(current_char, &sk, &alpha, current_state);
+            current_state = lecture_val(current_char, &sk, &alpha, current_state);
             break;
         case S2A_WAIT_DELTA:
-            current_char = lecture_val(current_char, &sk, &delta, current_state);
+            current_state = lecture_val(current_char, &sk, &delta, current_state);
             break;
         case S2A_WAIT_THETA:
-            current_char = lecture_val(current_char, &sk, &theta, current_state);
+            current_state = lecture_val(current_char, &sk, &theta, current_state);
             break;
 
         ////////////////////
