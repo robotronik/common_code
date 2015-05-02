@@ -1,0 +1,57 @@
+                                 COMMUNICATION
+
+////////////////////////////////////////////////////////////////////////////////
+
+ABREVIATIONS
+
+**A2S** Asservissement 2 Strategie
+
+C'est un message qui transite de l'asservissement vers la stratégie. Par
+conséquent, dans le code de l'asservissement, A2S est en émission, alors que
+dans le code de la stratégie A2S est en réception.
+
+**S2A** Strategie 2 Asservissement
+
+De même, dans le code de l'asservissement S2A est en réception, et dans
+la stratégie S2A est en émission.
+
+Par exemple `xy_relatif()` est un message envoyé de la stratégie vers
+l'asservissement, donc S2A.
+Alors que `done` qui signifie que l'asservissement a fini son mouvement
+va de l'asservissement vers la stratégie, donc A2S.
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+FICHIERS
+
+
+HEADERS
+
+    * À inclure avec l'asservissement
+a2s_emmission.h
+
+    * À inclure avec la stratégie
+a2s_reception.h
+
+    * Utilisé en interne ou inclus automatiquement
+a2s.h
+internal_reception.h
+text_reception.h
+
+
+SOURCES
+
+    * À comipiler avec l'asservissement
+a2s_emmission.c
+
+    * À comipiler avec la stratégie
+a2s_reception.c
+
+    * À comipiler avec la stratégie et l'asservissement
+a2s.c
+internal_reception.c
+text_reception.c
+
+
+////////////////////////////////////////////////////////////////////////////////
