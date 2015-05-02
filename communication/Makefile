@@ -112,9 +112,15 @@ default: all
 
 all: comm_asser comm_strategie
 
-comm_asser: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_ASSER_FILE)))
+comm_asser: $(OBJDIR)/comm_asser.a
 
-comm_strategie: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_STRATEGIE_FILE)))
+$(OBJDIR)/comm_asser.a: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_ASSER_FILE)))
+	ar -q $@ $^
+
+comm_strategie: $(OBJDIR)/comm_strategie.a
+
+$(OBJDIR)/comm_strategie.a: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_STRATEGIE_FILE)))
+	ar -q $@ $^
 
 $(OBJDIR)/a2s_emmission.o: a2s.h ../debug.h
 
@@ -151,7 +157,7 @@ tarall: $(SOURCEFILES)
 	tar -jcvf $(EXEC).tar.bz2 $^
 
 clean:
-	find $(BUILDIR) -name '*.o' -delete 2>/dev/null && rmdir -p --ignore-fail-on-non-empty $(BUILDIR)/*/* || true
+	find $(BUILDIR) -name '*.o' -delete 2>/dev/null && find $(BUILDIR) -name '*.a' -delete 2>/dev/null && rmdir -p --ignore-fail-on-non-empty $(BUILDIR)/*/* || true
 
 mrproper: clean
 	rm -rf $(EXEC) $(PIC_ELF) $(PIC_HEX) $(EXEC).tar.bz2
