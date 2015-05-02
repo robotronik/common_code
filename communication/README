@@ -30,12 +30,15 @@ HEADERS
 
     * À inclure avec l'asservissement
 a2s_emmission.h
+s2a_reception.h
 
     * À inclure avec la stratégie
 a2s_reception.h
+s2a_emmission.h
 
     * Utilisé en interne ou inclus automatiquement
 a2s.h
+s2a.h
 internal_reception.h
 text_reception.h
 
@@ -44,14 +47,16 @@ SOURCES
 
     * À comipiler avec l'asservissement
 a2s_emmission.c
+s2a_reception.c
 
     * À comipiler avec la stratégie
 a2s_reception.c
+s2a_emmission.c
 
     * À comipiler avec la stratégie et l'asservissement
 a2s.c
+s2a.c
 internal_reception.c
 text_reception.c
-
 
 ////////////////////////////////////////////////////////////////////////////////

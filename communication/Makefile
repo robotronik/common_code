@@ -128,15 +128,25 @@ endif
 
 all: comm_assert comm_strategie
 
-comm_assert: a2s_emmission.o a2s.o internal_reception.o text_reception.o
+comm_assert: a2s_emmission.o a2s.o internal_reception.o text_reception.o s2a_reception.o s2a.o
 
-comm_strategie: a2s.o a2s_reception.o internal_reception.o text_reception.o
+comm_strategie: a2s.o a2s_reception.o internal_reception.o text_reception.o s2a_emmission.o s2a.o
 
 a2s_emmission.o: a2s.h ../debug.h
 
 a2s_reception.o: a2s.h internal_reception.h text_reception.h ../debug.h
 
 a2s.o: a2s.h
+
+a2s_emmission.o: a2s.h a2s_emmission.h ../debug.h
+
+a2s_reception.o: a2s.h a2s_reception.h internal_reception.h text_reception.h ../debug.h
+
+s2a.o: s2a.h
+
+s2a_emmission.o: s2a.h s2a_emmission.h ../debug.h
+
+s2a_reception.o: s2a.h s2a_emmission.h ../debug.h ../../asservissement/trajectoire.h
 
 internal_reception.o: internal_reception.h
 
