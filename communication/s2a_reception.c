@@ -48,7 +48,7 @@ static char *s2a_keys_help[S2A_SIZE] = {
     [S2A_FCT_CLEAR]        = "Efface le chemin en cours de construction",
     [S2A_FCT_CHEMIN]       = "Envoie le chemin précédemment construit",
     [S2A_FCT_UPDATE]       = "met à jour les variables du protocole de simulation "
-            "pour qu'elle correspondent à celle utilisées par l'assert",
+            "pour qu'elles correspondent à celle utilisées par l'assert",
     [S2A_FCT_MODE_TENDU]   = "déplacement en mode tendu",
     [S2A_FCT_MODE_COURBE]  = "déplacement en mode courbe",
 };
@@ -77,7 +77,20 @@ void s2a_help()
     info("Liste des commandes supportées:\n\n");
 
     for (int i = 0; i < S2A_SIZE; i++) {
+        if (i == 0) {
+            info("    VARIABLES: attends un entier (pouvant être précédé d'un `-`) en paramêtre\n");
+        } else if (i == S2A_VAL_MAX_INDEX + 1) {
+            info("    COMMANDES: pas de paramètre\n");
+        } else if (i == S2A_FCT_MAX_INDEX + 1) {
+            info("    FONCTIONs: utilise les variables passé précédemment comme argument\n");
+        }
+
         info("%-20s%s\n", s2a_keys[i], s2a_keys_help[i]);
+
+        // séparation des partie
+        if ((i == S2A_VAL_MAX_INDEX) || (i == S2A_CMD_MAX_INDEX)) {
+            info("\n");
+        }
     }
 
     info("\nRemarque: les espaces et les tabulations sont ignorées dans"

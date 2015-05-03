@@ -39,7 +39,9 @@ typedef enum {
 
     // info
     S2A_SIZE,
-    S2A_VAL_SIZE = S2A_KEY_THETA + 1
+    S2A_VAL_MAX_INDEX = S2A_KEY_THETA,
+    S2A_CMD_MAX_INDEX = S2A_CMD_HELP,
+    S2A_FCT_MAX_INDEX = S2A_FCT_UPDATE,
 } e_s2a;
 
 

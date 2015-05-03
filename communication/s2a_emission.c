@@ -38,7 +38,7 @@ void s2a_send_message(e_s2a commande, ...)
     // On ajoute les argument éventuels
     // NB pour l'instant il n'y en a pas. La section suivante a été laissé pour
     // étendre facilement la fonction
-    if (commande < S2A_VAL_SIZE) {
+    if (commande <= S2A_VAL_MAX_INDEX) {
         // il y a un argument qui est un entier
         int d = va_arg(ap, int);
         send_text("%d", d);
