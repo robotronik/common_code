@@ -1,0 +1,85 @@
+                                 COMMUNICATION
+
+////////////////////////////////////////////////////////////////////////////////
+
+ABREVIATIONS
+
+**A2S** Asservissement 2 Strategie
+
+C'est un message qui transite de l'asservissement vers la stratégie. Par
+conséquent, dans le code de l'asservissement, A2S est en émission, alors que
+dans le code de la stratégie A2S est en réception.
+
+**S2A** Strategie 2 Asservissement
+
+De même, dans le code de l'asservissement S2A est en réception, et dans
+la stratégie S2A est en émission.
+
+Par exemple `xy_relatif()` est un message envoyé de la stratégie vers
+l'asservissement, donc S2A.
+Alors que `done` qui signifie que l'asservissement a fini son mouvement
+va de l'asservissement vers la stratégie, donc A2S.
+
+////////////////////////////////////////////////////////////////////////////////
+
+REMARQUES SUR LA CONCEPTION
+
+En émission, pour tester le fonctionnement, les fonctions standard d'émission de
+texte sont utilisables (printf entre autre). Par conséquent, il est très simple
+de vérifier que les messages sont correctement transmis en utilisant les outils
+standards UNIX.
+
+Il est conseillé d'utiliser le schéma suivant:
+
+clé1=valeur1
+clé2=valeur2
+validation
+
+La gestion du texte ligne par ligne fait qu'il est très simple de s'assurer que
+la réception est prête à recevoir un message : il suffit d'envoyer un retour
+chariot.
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+FICHIERS
+
+Les fichiers spécifique à une architecture sont situés dans le dossier
+hardware/$(ARCH)/file.c, et sont header est dans le dossier courrant (./file.h)
+
+HEADERS
+
+    * À inclure avec l'asservissement
+a2s_emission.h
+s2a_reception.h
+
+    * À inclure avec la stratégie
+a2s_reception.h
+s2a_emission.h
+
+    * Utilisé en interne ou inclus automatiquement
+a2s.h
+s2a.h
+internal_reception.h
+text_reception.h
+text_emission.h
+
+
+SOURCES
+
+    * À comipiler avec l'asservissement
+a2s_emission.c
+s2a_reception.c
+
+    * À comipiler avec la stratégie
+a2s_reception.c
+s2a_emission.c
+
+    * À comipiler avec la stratégie et l'asservissement
+a2s.c
+s2a.c
+internal_reception.c
+text_reception.c
+hardware/$(ARCH)/text_emission.c
+
+////////////////////////////////////////////////////////////////////////////////
