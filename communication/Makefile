@@ -42,15 +42,6 @@ UART_DIR   = $(COMMON_DIR)/uart/
 
 ################################################################################
 
-# Fichiers du projet
-
-FICHIERS_C =\
-	a2s_emission.c \
-	a2s_reception.c \
-	internal_reception.c
-
-################################################################################
-
 # Gestion des options
 
 ifeq ($(ARCH), PIC)
