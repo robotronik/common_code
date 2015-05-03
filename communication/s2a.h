@@ -38,11 +38,13 @@ typedef enum {
 
     S2A_FCT_UPDATE,         // met à jour les variables utilisées dans la simulation
 
+    S2A_FCT_SET_POS,        // change la valeure actuelle de x,y et theta
+
     // info
     S2A_SIZE,
     S2A_VAL_MAX_INDEX = S2A_KEY_THETA,
     S2A_CMD_MAX_INDEX = S2A_CMD_HELP,
-    S2A_FCT_MAX_INDEX = S2A_FCT_UPDATE,
+    S2A_FCT_MAX_INDEX = S2A_FCT_SET_POS,
 } e_s2a;
 
 

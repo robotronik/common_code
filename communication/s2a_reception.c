@@ -52,6 +52,7 @@ static char *s2a_keys_help[S2A_SIZE] = {
             "pour qu'elles correspondent à celle utilisées par l'assert",
     [S2A_FCT_MODE_TENDU]   = "déplacement en mode tendu",
     [S2A_FCT_MODE_COURBE]  = "déplacement en mode courbe",
+    [S2A_FCT_SET_POS]      = "défini la position du robot (x,y,theta)",
 };
 
 /**
@@ -270,6 +271,11 @@ void s2a_lecture_message(char current_char)
                         debug(_DEBUG_, "utilisation du mode courbe\n");
                         current_state = S2A_WAIT_NEW_LINE;
                         break;
+
+                    case S2A_FCT_SET_POS:
+                        set_x_actuel(x);
+                        set_y_actuel(y);
+                        set_theta_actuel(theta);
 
                     default:
                         debug(_ERROR_, "ERREUR dans le programme de lecture des clées\n");

@@ -21,4 +21,5 @@ char *s2a_keys[S2A_SIZE] = {
     [S2A_FCT_UPDATE]       = "update()",
     [S2A_FCT_MODE_TENDU]   = "mode(tendu)",
     [S2A_FCT_MODE_COURBE]  = "mode(courbe)",
+    [S2A_FCT_SET_POS]      = "set_pos()",
 };
