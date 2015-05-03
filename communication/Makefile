@@ -101,8 +101,9 @@ BUILDIR = build
 OBJDIR = $(BUILDIR)/$(ARCH)/$(DEBUG)
 
 # Liste des fichiers sans prefix
-COMM_ASSER_FILE =  a2s_emmission a2s internal_reception text_reception s2a_reception s2a
-COMM_STRATEGIE_FILE = a2s a2s_reception internal_reception text_reception s2a_emmission s2a
+COMMON = a2s internal_reception s2a text_reception
+COMM_ASSER_FILE =  a2s_emmission s2a_reception $(COMMON)
+COMM_STRATEGIE_FILE = a2s_reception s2a_emmission $(COMMON)
 
 default: all
 
