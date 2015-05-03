@@ -22,6 +22,25 @@ va de l'asservissement vers la stratégie, donc A2S.
 
 ////////////////////////////////////////////////////////////////////////////////
 
+REMARQUES SUR LA CONCEPTION
+
+En émission, pour tester le fonctionnement, les fonctions standard d'émission de
+texte sont utilisables (printf entre autre). Par conséquent, il est très simple
+de vérifier que les messages sont correctement transmis en utilisant les outils
+standards UNIX.
+
+Il est conseillé d'utiliser le schéma suivant:
+
+clé1=valeur1
+clé2=valeur2
+validation
+
+La gestion du texte ligne par ligne fait qu'il est très simple de s'assurer que
+la réception est prête à recevoir un message : il suffit d'envoyer un retour
+chariot.
+
+////////////////////////////////////////////////////////////////////////////////
+
 
 FICHIERS
 

@@ -3,32 +3,20 @@
 
 #include <stdbool.h>
 
-/* ======================================= */
-/* PROTOCOLE DE TRANSMISSION ORIENTÉ TEXTE */
-/* ======================================= */
-
-/* UTILISATION
+/**
+ * REMARQUES GÉNÉRALES
+ *    Ce fichiers contient des définition utilisé en interne par la réception.
  *
- * En émission les fonctions standard d'émission de texte sont utilisables
- * (printf entre autre). Par conséquent, il est très simple de vérifier que les
- * messages sont correctement transmis en utilisant les outils standards UNIX.
- *
- * En lecture, des primitives sont fournies dans le fichier ci-dessous pour
- * faciliter le découpage du texte.
+ *    Par conséquent, il doit être inclus lors de la compilation de
+ *    **asservissement** et de la **stratégie**, mais ne doit pas être utilisé
+ *    en dehors de s2a_reception.cet a2s_reception.c
  *
  * La gestion des espaces blancs (espace, tabs, …) est laissée à l'utilisateur.
  */
 
-/* Il est conseillé d'utiliser le schéma suivant:
- *
- * clé1=valeur1
- * clé2=valeur2
- * validation
- *
- * La gestion en ligne fait qu'il est très simple de s'assurer que la réception
- * est prête à recevoir un message : il suffit d'envoyer un retour chariot.
+/** Structure servant contenant les clés que l'on peut trouver lors de la
+ * reception de texte
  */
-
 struct search_key_t {
     int index;             ///< index du prochain caractère à lire
     int nb_keys;           ///< taille de keys[] en nombre d'élément
