@@ -83,9 +83,9 @@ ifeq ($(ARCH), PC)
 		LDFLAGS     += $(PC_SDL_LDF)
 		FICHIERS_C  += $(FICHIER_AFFICHAGE_C)
 	endif
-
-	CFLAGS += -DDEBUG=$(DEBUG) -g
 endif
+
+CFLAGS += -DDEBUG=$(DEBUG) -g
 
 ifeq ($(ARCH), STM32)
 endif
