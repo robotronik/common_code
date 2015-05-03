@@ -1,8 +1,9 @@
-#include <stdio.h>
+#include <assert.h>
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <string.h>
 
 #include "../debug.h"
@@ -98,4 +99,15 @@ int read_int(char c, int *val)
     }
 
     return 0;
+}
+
+void prepare_current_char(char *current_char)
+{
+    // on ne tient pas compte de la casse
+    *current_char = tolower(*current_char);
+}
+
+bool is_whitespace(char c)
+{
+    return (c == ' ') || (c == '\t');
 }

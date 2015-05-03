@@ -2,7 +2,6 @@
 
 #include "a2s.h"
 #include "a2s_reception.h"
-#include "internal_reception.h"
 #include "text_reception.h"
 
 /**

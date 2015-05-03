@@ -65,4 +65,16 @@ int read_int(char c, int *val);
  */
 bool is_end(char c);
 
+/**
+ * Traitement à effectuer l'analyse d'un caractère lors de la reception
+ *
+ * Pour simplifier le traitement, le protocole n'est pas sensible à la casse
+ */
+void prepare_current_char(char *current_char);
+
+/**
+ * Renvoie `true` si `c` est un caractère blanc (espace ou tab)
+ */
+bool is_whitespace(char c);
+
 #endif /* TEXT_RECEPTION_H */

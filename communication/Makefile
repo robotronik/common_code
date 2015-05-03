@@ -92,7 +92,7 @@ BUILDIR = build
 OBJDIR = $(BUILDIR)/$(ARCH)/$(DEBUG)
 
 # Liste des fichiers sans prefix
-COMMON = a2s internal_reception s2a text_emission text_reception
+COMMON = a2s s2a text_emission text_reception
 COMM_ASSER_FILE =  a2s_emission s2a_reception $(COMMON)
 COMM_STRATEGIE_FILE = a2s_reception s2a_emission $(COMMON)
 
@@ -116,21 +116,19 @@ $(OBJDIR)/comm_strategie.a: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_STRAT
 
 $(OBJDIR)/a2s_emission.o: a2s.h ../debug.h
 
-$(OBJDIR)/a2s_reception.o: a2s.h internal_reception.h text_reception.h ../debug.h
+$(OBJDIR)/a2s_reception.o: a2s.h text_reception.h ../debug.h
 
 $(OBJDIR)/a2s.o: a2s.h
 
 $(OBJDIR)/a2s_emission.o: a2s.h a2s_emission.h ../debug.h
 
-$(OBJDIR)/a2s_reception.o: a2s.h a2s_reception.h internal_reception.h text_reception.h ../debug.h
+$(OBJDIR)/a2s_reception.o: a2s.h a2s_reception.h text_reception.h ../debug.h
 
 $(OBJDIR)/s2a.o: s2a.h
 
 $(OBJDIR)/s2a_emission.o: s2a.h s2a_emission.h ../debug.h
 
 $(OBJDIR)/s2a_reception.o: s2a.h s2a_emission.h ../debug.h ../../asservissement/trajectoire.h
-
-$(OBJDIR)/internal_reception.o: internal_reception.h
 
 $(OBJDIR)/text_reception.o: text_reception.h ../debug.h
 

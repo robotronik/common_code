@@ -4,7 +4,6 @@
 #include "../../asservissement/odometrie.h"
 #include "../../asservissement/trajectoire.h"
 
-#include "internal_reception.h"
 #include "s2a.h"
 #include "s2a_reception.h"
 #include "text_reception.h"
