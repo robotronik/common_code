@@ -5,6 +5,7 @@
 
 #include "a2s.h"
 #include "a2s_emmission.h"
+#include "text_emmission.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -15,7 +16,7 @@ void a2s_send_message(e_a2s commande, ...)
     va_start(ap, commande);
 
     // On envoie la commande
-    printf("%s", a2s_keys[commande]);
+    send_text("%s", a2s_keys[commande]);
     debug(_DEBUG_, "envoie [asser vers strategie] de la commande %s\n",
                 a2s_keys[commande]);
 
@@ -25,11 +26,11 @@ void a2s_send_message(e_a2s commande, ...)
     if (commande < A2S_VAL_SIZE) {
         // il y a un argument qui est un entier
         int d = va_arg(ap, int);
-        printf("%d", d);
+        send_text("%d", d);
         debug(_DEBUG_, "avec pour argument : %d", d);
     }
 
     // On ajoute un retour chariot
-    printf("\n");
+    send_text("\n");
     va_end(ap);
 }

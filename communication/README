@@ -25,6 +25,8 @@ va de l'asservissement vers la stratégie, donc A2S.
 
 FICHIERS
 
+Les fichiers spécifique à une architecture sont situés dans le dossier
+hardware/$(ARCH)/file.c, et sont header est dans le dossier courrant (./file.h)
 
 HEADERS
 
@@ -41,6 +43,7 @@ a2s.h
 s2a.h
 internal_reception.h
 text_reception.h
+text_emmission.h
 
 
 SOURCES
@@ -58,5 +61,6 @@ a2s.c
 s2a.c
 internal_reception.c
 text_reception.c
+hardware/$(ARCH)/text_emmission.c
 
 ////////////////////////////////////////////////////////////////////////////////

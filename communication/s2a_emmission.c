@@ -1,10 +1,10 @@
 #include <stdarg.h> // pour le nombre variable d'argument
-#include <stdio.h>
 
 #include "../debug.h"
 
 #include "s2a.h"
 #include "s2a_emmission.h"
+#include "text_emmission.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -31,7 +31,7 @@ void s2a_send_message(e_s2a commande, ...)
     va_start(ap, commande);
 
     // On envoie la commande
-    printf("%s", s2a_keys[commande]);
+    send_text("%s", s2a_keys[commande]);
     debug(_DEBUG_, "envoie [asser vers strategie] de la commande %s\n",
                 s2a_keys[commande]);
 
@@ -41,11 +41,11 @@ void s2a_send_message(e_s2a commande, ...)
     if (commande < S2A_VAL_SIZE) {
         // il y a un argument qui est un entier
         int d = va_arg(ap, int);
-        printf("%d", d);
+        send_text("%d", d);
         debug(_DEBUG_, "avec pour argument : %d", d);
     }
 
     // On ajoute un retour chariot
-    printf("\n");
+    send_text("\n");
     va_end(ap);
 }
