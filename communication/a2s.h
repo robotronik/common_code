@@ -12,14 +12,18 @@
 
 typedef enum {
     // valeures: la fonction a2s_send_message() attend un entier en argument
+    A2S_VAL_X,
+    A2S_VAL_Y,
+    A2S_VAL_THETA,
     // commandes: pas d'argument
     A2S_CMD_DONE,       // d         : l'asservissement à fini le trajet en cour
+    A2S_CMD_SEND_POS,   // p         : fin de reception de x,y,et theta
     A2S_CMD_QUIT,       // q         : quite la simulation
     A2S_CMD_HELP,       // ?         : affiche l'aide
     // fonction: utilise les valeurs précédement envoyé, donc pas d'argument dans la
     // fonction a2s_send_message()
     A2S_SIZE,
-    A2S_VAL_SIZE = 0,
+    A2S_VAL_MAX_INDEX = A2S_VAL_THETA,
 } e_a2s;
 
 

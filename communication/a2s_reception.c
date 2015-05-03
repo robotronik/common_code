@@ -9,6 +9,9 @@
  * \see a2s_state_name pour plus de détails
  */
 typedef enum {
+    S2A_WAIT_X,
+    S2A_WAIT_Y,
+    S2A_WAIT_THETA,
     A2S_WAIT_KEY,
     A2S_WAIT_NEW_LINE,
 } e_a2s_state;
@@ -20,6 +23,7 @@ void a2s_help();
 
 static char *a2s_keys_help[A2S_SIZE] = {
     [A2S_CMD_DONE]         = "L'asservissement à fini le trajet en cour",
+    [A2S_CMD_SEND_POS]     = "fin de reception de x,y,et theta",
     [A2S_CMD_QUIT]         = "quitter la simulation",
     [A2S_CMD_HELP]         = "affiche l'aide",
 };
@@ -52,6 +56,9 @@ void a2s_lecture_message(char current_char)
         to_search
     };
     static e_a2s_state current_state = A2S_WAIT_KEY;
+    static int x = 0;
+    static int y = 0;
+    static int theta = 0;
 
     ////////////////////
 
@@ -98,8 +105,28 @@ void a2s_lecture_message(char current_char)
                 debug(_DEBUG_, "CLÉ TROUVÉ : %s\n", a2s_keys[ret]);
 
                 switch (ret) {
+
+                    case A2S_VAL_X:
+                        x = 0;
+                        current_state = S2A_WAIT_X;
+                        break;
+
+                    case A2S_VAL_Y:
+                        y = 0;
+                        current_state = S2A_WAIT_Y;
+                        break;
+
+                    case A2S_VAL_THETA:
+                        theta = 0;
+                        current_state = S2A_WAIT_THETA;
+                        break;
+
                     case A2S_CMD_DONE:
-                        debug(_WARNING_, "TODO: appeler le code de la stratégie ici");
+                        debug(_ERROR_, "TODO: appeler le code de la stratégie ici");
+                        break;
+
+                    case A2S_CMD_SEND_POS:
+                        debug(_ERROR_, "TODO: appeler le code de la stratégie ici");
                         break;
 
                     case A2S_CMD_HELP:
@@ -120,6 +147,19 @@ void a2s_lecture_message(char current_char)
 
             break;
         }
+
+        case S2A_WAIT_X:
+            current_state = lecture_val(current_char, &x,
+                    current_state, A2S_WAIT_KEY, A2S_WAIT_NEW_LINE);
+            break;
+        case S2A_WAIT_Y:
+            current_state = lecture_val(current_char, &y,
+                    current_state, A2S_WAIT_KEY, A2S_WAIT_NEW_LINE);
+            break;
+        case S2A_WAIT_THETA:
+            current_state = lecture_val(current_char, &theta,
+                    current_state, A2S_WAIT_KEY, A2S_WAIT_NEW_LINE);
+            break;
 
        ////////////////////
 

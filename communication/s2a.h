@@ -19,6 +19,7 @@ typedef enum {
     S2A_KEY_THETA,          // mise à jour de la variable theta (angle absolu en degré)
     // commandes: pas d'argument
     S2A_CMD_QUIT,           // quitte la simulation
+    S2A_CMD_GET_POS,        // demande x,y et theta actuel
     S2A_CMD_HELP,           // affiche l'aide
     // fonction: utilise les valeurs précédement envoyé, donc pas d'argument dans la
     // fonction s2a_send_message()

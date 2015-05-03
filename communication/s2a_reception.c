@@ -6,6 +6,7 @@
 
 #include "s2a.h"
 #include "s2a_reception.h"
+#include "a2s_emission.h"
 #include "text_reception.h"
 #include "text_reception.h"
 
@@ -38,6 +39,7 @@ static char *s2a_keys_help[S2A_SIZE] = {
 
     [S2A_CMD_QUIT]         = "quitter la simulation",
     [S2A_CMD_HELP]         = "affiche l'aide",
+    [S2A_CMD_GET_POS]      = "demande x,y et theta actuel",
 
     [S2A_FCT_ALPHA_DELTA]  = "set_trajectoire_alpha_delta(alpha, delta)",
     [S2A_FCT_XY_RELATIF]   = "set_trajectoire_xy_relatif(x,y)",
@@ -190,6 +192,14 @@ void s2a_lecture_message(char current_char)
 
                     case S2A_CMD_HELP:
                         s2a_help();
+                        current_state = S2A_WAIT_NEW_LINE;
+                        break;
+
+                    case S2A_CMD_GET_POS:
+                        a2s_send_message(A2S_VAL_X,get_x_actuel());
+                        a2s_send_message(A2S_VAL_Y,get_y_actuel());
+                        a2s_send_message(A2S_VAL_THETA,get_theta_actuel());
+                        a2s_send_message(A2S_CMD_SEND_POS);
                         current_state = S2A_WAIT_NEW_LINE;
                         break;
 

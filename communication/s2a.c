@@ -9,6 +9,7 @@ char *s2a_keys[S2A_SIZE] = {
 
     [S2A_CMD_QUIT]         = "q",
     [S2A_CMD_HELP]         = "?",
+    [S2A_CMD_GET_POS]      = "get_pos()",
 
     [S2A_FCT_ALPHA_DELTA]  = "alpha_delta()",
     [S2A_FCT_XY_RELATIF]   = "xy_relatif()",
