@@ -1,5 +1,5 @@
-#ifndef S2A_EMMISSION_H
-#define S2A_EMMISSION_H
+#ifndef S2A_EMISSION_H
+#define S2A_EMISSION_H
 
 /**
  * REMARQUES GÉNÉRALES
@@ -26,4 +26,4 @@
 void s2a_send_message(e_s2a commande, ...);
 
 
-#endif /* S2A_EMMISSION_H */
+#endif /* S2A_EMISSION_H */

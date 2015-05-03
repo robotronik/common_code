@@ -31,36 +31,36 @@ hardware/$(ARCH)/file.c, et sont header est dans le dossier courrant (./file.h)
 HEADERS
 
     * À inclure avec l'asservissement
-a2s_emmission.h
+a2s_emission.h
 s2a_reception.h
 
     * À inclure avec la stratégie
 a2s_reception.h
-s2a_emmission.h
+s2a_emission.h
 
     * Utilisé en interne ou inclus automatiquement
 a2s.h
 s2a.h
 internal_reception.h
 text_reception.h
-text_emmission.h
+text_emission.h
 
 
 SOURCES
 
     * À comipiler avec l'asservissement
-a2s_emmission.c
+a2s_emission.c
 s2a_reception.c
 
     * À comipiler avec la stratégie
 a2s_reception.c
-s2a_emmission.c
+s2a_emission.c
 
     * À comipiler avec la stratégie et l'asservissement
 a2s.c
 s2a.c
 internal_reception.c
 text_reception.c
-hardware/$(ARCH)/text_emmission.c
+hardware/$(ARCH)/text_emission.c
 
 ////////////////////////////////////////////////////////////////////////////////

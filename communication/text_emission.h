@@ -1,5 +1,5 @@
-#ifndef TEXT_EMMISSION_H
-#define TEXT_EMMISSION_H
+#ifndef TEXT_EMISSION_H
+#define TEXT_EMISSION_H
 
 /**
  * Cette fonction envoie du texte. Sur micro-controleur, elle utilise l'uart,
@@ -13,4 +13,4 @@
 void send_text(const char *format, ...);
 
 
-#endif /* TEXT_EMMISSION_H */
+#endif /* TEXT_EMISSION_H */
