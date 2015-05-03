@@ -21,7 +21,7 @@ export DEBUG = _WARNING_
 PC_EXEC    = asser_robot
 
 PC_CC      = gcc
-PC_CFLAGS  = -DPIC_BUILD=0 -W -Wall -std=c99 -fdiagnostics-color=auto
+PC_CFLAGS  = -DPIC_BUILD=0 -W -Wall -std=c99 -fdiagnostics-color=auto -I.
 PC_LDFLAGS = -lm -lpthread
 
 PIC_ELF    = $(PC_EXEC).elf
