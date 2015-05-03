@@ -58,7 +58,7 @@ int read_string(char c, int *index, char *str, int size_str);
  * return -1 en cas d'overflow
  * return -2 si l'entrée n'est pas un nombre
  */
-int read_int(char c, int *val);
+int read_unsigned(char c, int *val);
 
 /** Return true si [c] est un caractère de find de ligne ou de fichier (\0, \r
  * et \n)
@@ -76,5 +76,18 @@ void prepare_current_char(char *current_char);
  * Renvoie `true` si `c` est un caractère blanc (espace ou tab)
  */
 bool is_whitespace(char c);
+
+/*
+ * Lecture d'une valeure
+ *
+ * \param c caractère en cours de réception
+ * \param val valeur lu ou en cour de lecture (doit être mis à 0 avant la
+ * première lecture).
+ *
+ * \return state_found si la reception est terminée
+ * \return state_error en cas d'erreur
+ * \return state_current sinon (réception non terminée).
+ */
+int lecture_val(char c, int *val, int state_lecture, int state_found, int state_error);
 
 #endif /* TEXT_RECEPTION_H */

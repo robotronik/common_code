@@ -62,12 +62,6 @@ void efface_chemin(s_liste *chemin);
  */
 void add_point(int x, int y, s_liste *chemin);
 
-/**
- * Lecture d'une valeure
- */
-e_s2a_state lecture_val(char c, struct search_key_t *sk, int *val,
-                         e_s2a_state current_state);
-
 ////////////////////////////////////////////////////////////////////////////////
 
 void s2a_help()
@@ -98,72 +92,6 @@ void s2a_help()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-e_s2a_state lecture_val(char c, struct search_key_t *sk, int *val,
-                         e_s2a_state current_state)
-{
-    static bool first_char = true;
-    static bool is_neg_number = false;
-
-    // Lecture d'un entier
-    debug(_DEBUG_, "lecture entier\n");
-
-    if(is_whitespace(c)) {
-        debug(_DEBUG_, "espace ignoré durant la lecture\n");
-        return current_state;
-    }
-
-    // le premier char peut être un signe '-'
-    if (first_char) {
-        first_char = false;
-        if (c == '-') {
-            debug(_DEBUG_, "Le nombre est négatif\n");
-            is_neg_number = true;
-            return current_state;
-        }
-    }
-
-    int ret = read_int(c, val);
-    debug(_VERBOSE_, "value read: %d\n", *val);
-
-    // la récéption n'est pas fini, on reste dans le même état
-    if (ret == 0) {
-        debug(_VERBOSE_, "reception en cour\n");
-        return current_state;
-    }
-
-    // reception terminée
-    if (ret > 0) {
-        if (is_neg_number) {
-            *val = -*val;
-        }
-        debug(_DEBUG_, "reception terminé\n");
-        debug(_DEBUG_, "valeur: %d\n", *val);
-
-        // On se prépare à recevoir une nouvelle trame
-        reset_search(sk);
-        first_char = true;
-        is_neg_number = false;
-        return S2A_WAIT_KEY;
-    }
-
-    // erreur
-    if (ret == -1) {
-        debug(_ERROR_, "ERREUR, d'overflow\n");
-        *val = 0;
-        return S2A_WAIT_NEW_LINE;
-    }
-    else if (ret == -2) {
-        debug(_ERROR_, "ERREUR, %c n'est pas un nombre\n", c);
-        return S2A_WAIT_NEW_LINE;
-    }
-    else {
-        debug(_ERROR_, "ERREUR inconnu lors de la lecture d'une valeure : %d\n", ret);
-        *val = 0;
-        return S2A_WAIT_NEW_LINE;
-    }
-}
-
 
 void s2a_lecture_message(char current_char)
 {
@@ -224,6 +152,7 @@ void s2a_lecture_message(char current_char)
 
             // On a fini de recevoir la clé
             if (ret >= 0) {
+                reset_search(&sk);
                 debug(_DEBUG_, "CLÉ TROUVÉ : %s\n", s2a_keys[ret]);
 
                 switch (ret) {
@@ -352,19 +281,24 @@ void s2a_lecture_message(char current_char)
         ////////////////////
 
         case S2A_WAIT_X:
-            current_state = lecture_val(current_char, &sk, &x, current_state);
+            current_state = lecture_val(current_char, &x,
+                    current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
             break;
         case S2A_WAIT_Y:
-            current_state = lecture_val(current_char, &sk, &y, current_state);
+            current_state = lecture_val(current_char, &y,
+                    current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
             break;
         case S2A_WAIT_ALPHA:
-            current_state = lecture_val(current_char, &sk, &alpha, current_state);
+            current_state = lecture_val(current_char, &alpha,
+                    current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
             break;
         case S2A_WAIT_DELTA:
-            current_state = lecture_val(current_char, &sk, &delta, current_state);
+            current_state = lecture_val(current_char, &delta,
+                    current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
             break;
         case S2A_WAIT_THETA:
-            current_state = lecture_val(current_char, &sk, &theta, current_state);
+            current_state = lecture_val(current_char, &theta,
+                    current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
             break;
 
         ////////////////////

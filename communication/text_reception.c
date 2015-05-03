@@ -75,7 +75,7 @@ int read_string(char c, int *index, char *str, int size_str)
     return 0;
 }
 
-int read_int(char c, int *val)
+int read_unsigned(char c, int *val)
 {
     if (is_end(c)) {
         debug(_VERBOSE_, "new_line\n");
@@ -84,7 +84,7 @@ int read_int(char c, int *val)
 
     // On s'assure qu'on a reçu un nombre
     if ((c < '0') || (c > '9')) {
-        debug(_VERBOSE_, "erreur, %c n'est pas un nombre\n", c);
+        debug(_ERROR_, "erreur, %c n'est pas un nombre\n", c);
         return -2;
     }
 
@@ -94,7 +94,7 @@ int read_int(char c, int *val)
 
     // overflow
     if (*val < pre_val) {
-        debug(_VERBOSE_, "overflow");
+        debug(_ERROR_, "overflow lors de la lecture d'un nombre");
         return -1;
     }
 
@@ -110,4 +110,59 @@ void prepare_current_char(char *current_char)
 bool is_whitespace(char c)
 {
     return (c == ' ') || (c == '\t');
+}
+
+int lecture_val(char c, int *val, int state_lecture, int state_found, int state_error)
+{
+    static bool is_neg_number;
+    static bool first_char = true;
+
+    // Lecture d'un entier
+    debug(_VERBOSE_, "lecture entier\n");
+
+    if(is_whitespace(c)) {
+        debug(_DEBUG_, "espace ignoré durant la lecture d'une valeure\n");
+        return state_lecture;
+    }
+
+    if (first_char) {
+        *val = 0;
+        is_neg_number = false;
+        first_char = false;
+
+        // On regarde si le nombre est négatif (ce doit être le premier caractère)
+        if (c == '-') {
+            debug(_DEBUG_, "Le nombre est négatif\n");
+            is_neg_number = true;
+            return state_lecture;
+        }
+    }
+
+    int ret = read_unsigned(c, val);
+    debug(_VERBOSE_, "valeure en cour de lecture: %d\n", *val);
+
+    // la récéption n'est pas fini, on reste dans le même état
+    if (ret == 0) {
+        debug(_VERBOSE_, "reception en cour\n");
+        return state_lecture;
+    }
+
+    // reception terminée
+    else if (ret > 0) {
+        if (is_neg_number) {
+            *val = -*val;
+        }
+        debug(_DEBUG_, "reception terminé\n");
+        debug(_DEBUG_, "valeur: %d\n", *val);
+
+        // On se prépare à recevoir une nouvelle trame
+        first_char = true;
+        is_neg_number = false;
+        return state_found;
+    }
+
+    // il y a eu des erreurs de reception
+    else {
+        return state_error;
+    }
 }
