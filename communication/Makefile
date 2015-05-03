@@ -45,7 +45,7 @@ UART_DIR   = $(COMMON_DIR)/uart/
 # Fichiers du projet
 
 FICHIERS_C =\
-	a2s_emmission.c \
+	a2s_emission.c \
 	a2s_reception.c \
 	internal_reception.c
 
@@ -101,9 +101,9 @@ BUILDIR = build
 OBJDIR = $(BUILDIR)/$(ARCH)/$(DEBUG)
 
 # Liste des fichiers sans prefix
-COMMON = a2s internal_reception s2a text_emmission text_reception
-COMM_ASSER_FILE =  a2s_emmission s2a_reception $(COMMON)
-COMM_STRATEGIE_FILE = a2s_reception s2a_emmission $(COMMON)
+COMMON = a2s internal_reception s2a text_emission text_reception
+COMM_ASSER_FILE =  a2s_emission s2a_reception $(COMMON)
+COMM_STRATEGIE_FILE = a2s_reception s2a_emission $(COMMON)
 
 default: all
 
@@ -123,27 +123,27 @@ comm_strategie: $(OBJDIR)/comm_strategie.a
 $(OBJDIR)/comm_strategie.a: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_STRATEGIE_FILE)))
 	ar -q $@ $^
 
-$(OBJDIR)/a2s_emmission.o: a2s.h ../debug.h
+$(OBJDIR)/a2s_emission.o: a2s.h ../debug.h
 
 $(OBJDIR)/a2s_reception.o: a2s.h internal_reception.h text_reception.h ../debug.h
 
 $(OBJDIR)/a2s.o: a2s.h
 
-$(OBJDIR)/a2s_emmission.o: a2s.h a2s_emmission.h ../debug.h
+$(OBJDIR)/a2s_emission.o: a2s.h a2s_emission.h ../debug.h
 
 $(OBJDIR)/a2s_reception.o: a2s.h a2s_reception.h internal_reception.h text_reception.h ../debug.h
 
 $(OBJDIR)/s2a.o: s2a.h
 
-$(OBJDIR)/s2a_emmission.o: s2a.h s2a_emmission.h ../debug.h
+$(OBJDIR)/s2a_emission.o: s2a.h s2a_emission.h ../debug.h
 
-$(OBJDIR)/s2a_reception.o: s2a.h s2a_emmission.h ../debug.h ../../asservissement/trajectoire.h
+$(OBJDIR)/s2a_reception.o: s2a.h s2a_emission.h ../debug.h ../../asservissement/trajectoire.h
 
 $(OBJDIR)/internal_reception.o: internal_reception.h
 
 $(OBJDIR)/text_reception.o: text_reception.h ../debug.h
 
-$(OBJDIR)/text_emmission.o: hardware/$(ARCH)/text_emmission.c text_emmission.h
+$(OBJDIR)/text_emission.o: hardware/$(ARCH)/text_emission.c text_emission.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJDIR)/%.o: %.c %.h | $(OBJDIR)

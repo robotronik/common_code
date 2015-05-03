@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "text_emmission.h"
+#include "text_emission.h"
 
 
 void send_text(const char *format, ...)

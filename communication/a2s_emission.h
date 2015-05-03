@@ -1,9 +1,9 @@
-#ifndef A2S_EMMISSION_H
-#define A2S_EMMISSION_H
+#ifndef A2S_emission_H
+#define A2S_emission_H
 
 /**
  * REMARQUES GÉNÉRALES
- *    Ce fichiers sert d'interface pour l'emmission concernant la communication
+ *    Ce fichiers sert d'interface pour l'emission concernant la communication
  *    de l'asservissement vers la stratégie.
  *
  *    Par conséquent, il doit être inclus dans les fichiers **asservissement**
@@ -26,4 +26,4 @@
 void a2s_send_message(e_a2s commande, ...);
 
 
-#endif /* A2S_EMMISSION_H */
+#endif /* A2S_emission_H */

@@ -34,7 +34,7 @@ typedef enum {
  *
  *    Par conséquent, il doit être inclus lors de la compilation de
  *    **asservissement** et de la **stratégie**, mais ne doit pas être utilisé
- *    en dehors de a2s_emmission.c et a2s_reception.c
+ *    en dehors de a2s_emission.c et a2s_reception.c
  */
 
 /**
