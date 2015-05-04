@@ -38,9 +38,9 @@ void s2a_help();
 static char *s2a_keys_help[S2A_SIZE] = {
     [S2A_KEY_X]            = "coordonnées absolu en cm",
     [S2A_KEY_Y]            = "coordonnées absolu en cm",
-    [S2A_KEY_ALPHA]        = "angle relatif en ???? degré? milidegré?",
+    [S2A_KEY_ALPHA]        = "angle relatif en miliradiants",
     [S2A_KEY_DELTA]        = "distance relative en cm",
-    [S2A_KEY_THETA]        = "angle absolu en ???? degré? milidegré?",
+    [S2A_KEY_THETA]        = "angle absolu en miliradiants",
     [S2A_KEY_KP_DELTA]     = "coefficient KP du PID pour delta",
     [S2A_KEY_KD_DELTA]     = "coefficient KD du PID pour delta",
     [S2A_KEY_KP_ALPHA]     = "coefficient KP du PID pour alpha",

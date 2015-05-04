@@ -14,14 +14,13 @@ typedef enum {
     // valeures: la fonction s2a_send_message() attend un entier en argument
     S2A_KEY_X,              // mise à jour de la variable x (coordonnée en cm)
     S2A_KEY_Y,              // mise à jour de la variable y (coordonnée en cm)
-    S2A_KEY_ALPHA,          // mise à jour de la variable alpha (angle relatif en degré)
+    S2A_KEY_ALPHA,          // mise à jour de la variable alpha (angle relatif en miliradiants)
     S2A_KEY_DELTA,          // mise à jour de la variable delta (distance en cm)
-    S2A_KEY_THETA,          // mise à jour de la variable theta (angle absolu en degré)
+    S2A_KEY_THETA,          // mise à jour de la variable theta (angle absolu en miliradiants)
     S2A_KEY_KP_DELTA,       // mise à jour du coeff KP pour le PID de delta
     S2A_KEY_KD_DELTA,       // mise à jour du coeff KD pour le PID de delta
     S2A_KEY_KP_ALPHA,       // mise à jour du coeff KP pour le PID de alpha
     S2A_KEY_KD_ALPHA,       // mise à jour du coeff KD pour le PID de alpha
-
     // commandes: pas d'argument
     S2A_CMD_QUIT,           // quitte la simulation
     S2A_CMD_GET_POS,        // demande x,y et theta actuel
