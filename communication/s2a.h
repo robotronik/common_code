@@ -21,6 +21,8 @@ typedef enum {
     S2A_CMD_QUIT,           // quitte la simulation
     S2A_CMD_GET_POS,        // demande x,y et theta actuel
     S2A_CMD_HELP,           // affiche l'aide
+    S2A_CMD_EMERGENCY_STOP, // arrêt d'urgence
+    S2A_CMD_STOP,           // arrêt
     // fonction: utilise les valeurs précédement envoyé, donc pas d'argument dans la
     // fonction s2a_send_message()
     S2A_FCT_ALPHA_DELTA,    // new_alpha_delta(alpha, delta);
@@ -43,7 +45,7 @@ typedef enum {
     // info
     S2A_SIZE,
     S2A_VAL_MAX_INDEX = S2A_KEY_THETA,
-    S2A_CMD_MAX_INDEX = S2A_CMD_HELP,
+    S2A_CMD_MAX_INDEX = S2A_CMD_STOP,
     S2A_FCT_MAX_INDEX = S2A_FCT_SET_POS,
 } e_s2a;
 

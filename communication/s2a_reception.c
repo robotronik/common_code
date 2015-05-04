@@ -40,6 +40,8 @@ static char *s2a_keys_help[S2A_SIZE] = {
     [S2A_CMD_QUIT]         = "quitter la simulation",
     [S2A_CMD_HELP]         = "affiche l'aide",
     [S2A_CMD_GET_POS]      = "demande x,y et theta actuel",
+    [S2A_CMD_EMERGENCY_STOP]="arrêt d'urgence",
+    [S2A_CMD_STOP]         = "arrêt",
 
     [S2A_FCT_ALPHA_DELTA]  = "set_trajectoire_alpha_delta(alpha, delta)",
     [S2A_FCT_XY_RELATIF]   = "set_trajectoire_xy_relatif(x,y)",
@@ -204,11 +206,21 @@ void s2a_lecture_message(char current_char)
                         current_state = S2A_WAIT_NEW_LINE;
                         break;
 
+                    case S2A_CMD_EMERGENCY_STOP:
+                        set_trajectoire_emergency_stop();
+                        current_state = S2A_WAIT_NEW_LINE;
+                        break;
+
+                    case S2A_CMD_STOP:
+                        set_trajectoire_stop();
+                        current_state = S2A_WAIT_NEW_LINE;
+                        break;
+
                     case S2A_FCT_ALPHA_DELTA:
                         debug(_DEBUG_, "set_trajectoire_alpha_delta(%d, %d);\n", alpha, delta);
                         set_trajectoire_alpha_delta(alpha, delta);
                         current_state = S2A_WAIT_NEW_LINE;
-                        break;
+                         break;
 
                     case S2A_FCT_XY_RELATIF:
                         debug(_DEBUG_, "set_trajectoire_xy_relatif(%d, %d);\n", x, y);
