@@ -17,6 +17,11 @@ typedef enum {
     S2A_KEY_ALPHA,          // mise à jour de la variable alpha (angle relatif en degré)
     S2A_KEY_DELTA,          // mise à jour de la variable delta (distance en cm)
     S2A_KEY_THETA,          // mise à jour de la variable theta (angle absolu en degré)
+    S2A_KEY_KP_DELTA,       // mise à jour du coeff KP pour le PID de delta
+    S2A_KEY_KD_DELTA,       // mise à jour du coeff KD pour le PID de delta
+    S2A_KEY_KP_ALPHA,       // mise à jour du coeff KP pour le PID de alpha
+    S2A_KEY_KD_ALPHA,       // mise à jour du coeff KD pour le PID de alpha
+
     // commandes: pas d'argument
     S2A_CMD_QUIT,           // quitte la simulation
     S2A_CMD_GET_POS,        // demande x,y et theta actuel
@@ -41,6 +46,8 @@ typedef enum {
     S2A_FCT_UPDATE,         // met à jour les variables utilisées dans la simulation
 
     S2A_FCT_SET_POS,        // change la valeure actuelle de x,y et theta
+
+    S2A_FCT_SET_PID,     // change les valeurs des PID
 
     // info
     S2A_SIZE,

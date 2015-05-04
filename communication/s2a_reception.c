@@ -3,6 +3,7 @@
 #include "../../asservissement/match.h"
 #include "../../asservissement/odometrie.h"
 #include "../../asservissement/trajectoire.h"
+#include "../../asservissement/PID.h"
 
 #include "s2a.h"
 #include "s2a_reception.h"
@@ -21,6 +22,10 @@ typedef enum {
     S2A_WAIT_DELTA,
     S2A_WAIT_THETA,
     S2A_WAIT_KEY,
+    S2A_WAIT_KP_DELTA,
+    S2A_WAIT_KD_DELTA,
+    S2A_WAIT_KP_ALPHA,
+    S2A_WAIT_KD_ALPHA,
     S2A_WAIT_NEW_LINE,
     S2A_STATE_SIZE,
 } e_s2a_state;
@@ -36,6 +41,10 @@ static char *s2a_keys_help[S2A_SIZE] = {
     [S2A_KEY_ALPHA]        = "angle relatif en ???? degré? milidegré?",
     [S2A_KEY_DELTA]        = "distance relative en cm",
     [S2A_KEY_THETA]        = "angle absolu en ???? degré? milidegré?",
+    [S2A_KEY_KP_DELTA]     = "coefficient KP du PID pour delta",
+    [S2A_KEY_KD_DELTA]     = "coefficient KD du PID pour delta",
+    [S2A_KEY_KP_ALPHA]     = "coefficient KP du PID pour alpha",
+    [S2A_KEY_KD_ALPHA]     = "coefficient KD du PID pour alpha",
 
     [S2A_CMD_QUIT]         = "quitter la simulation",
     [S2A_CMD_HELP]         = "affiche l'aide",
@@ -113,6 +122,7 @@ void s2a_lecture_message(char current_char)
 
     // Variables du programme en cour de réception
     static int x = 0, y = 0, alpha = 0, delta = 0, theta = 0;
+    static int kp_delta = 0, kd_delta = 0, kp_alpha = 0, kd_alpha = 0;
     static s_liste chemin = { .taille = 0 };
 
     ////////////////////
@@ -184,6 +194,26 @@ void s2a_lecture_message(char current_char)
                     case S2A_KEY_THETA:
                         theta = 0;
                         current_state = S2A_WAIT_THETA;
+                        break;
+
+                   case S2A_KEY_KP_DELTA:
+                        kp_delta = 0;
+                        current_state = S2A_WAIT_KP_DELTA;
+                        break;
+
+                   case S2A_KEY_KD_DELTA:
+                        kd_delta = 0;
+                        current_state = S2A_WAIT_KD_DELTA;
+                        break;
+
+                   case S2A_KEY_KP_ALPHA:
+                        kp_alpha = 0;
+                        current_state = S2A_WAIT_KP_ALPHA;
+                        break;
+
+                   case S2A_KEY_KD_ALPHA:
+                        kd_alpha = 0;
+                        current_state = S2A_WAIT_KD_ALPHA;
                         break;
 
                     case S2A_CMD_QUIT:
@@ -289,6 +319,12 @@ void s2a_lecture_message(char current_char)
                         set_y_actuel(y);
                         set_theta_actuel(theta);
 
+                    case S2A_FCT_SET_PID:
+                        set_kp_delta(kp_delta);
+                        set_kd_delta(kd_delta);
+                        set_kp_alpha(kp_alpha);
+                        set_kd_alpha(kd_alpha);
+
                     default:
                         debug(_ERROR_, "ERREUR dans le programme de lecture des clées\n");
                         break;
@@ -326,6 +362,22 @@ void s2a_lecture_message(char current_char)
             break;
         case S2A_WAIT_THETA:
             current_state = lecture_val(current_char, &theta,
+                    current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
+            break;
+        case S2A_WAIT_KP_DELTA:
+            current_state = lecture_val(current_char, &kp_delta,
+                    current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
+            break;
+        case S2A_WAIT_KD_DELTA:
+            current_state = lecture_val(current_char, &kd_delta,
+                    current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
+            break;
+        case S2A_WAIT_KP_ALPHA:
+            current_state = lecture_val(current_char, &kp_alpha,
+                    current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
+            break;
+        case S2A_WAIT_KD_ALPHA:
+            current_state = lecture_val(current_char, &kd_alpha,
                     current_state, S2A_WAIT_KEY, S2A_WAIT_NEW_LINE);
             break;
 

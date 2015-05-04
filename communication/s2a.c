@@ -6,6 +6,10 @@ char *s2a_keys[S2A_SIZE] = {
     [S2A_KEY_ALPHA]        = "alpha=",
     [S2A_KEY_DELTA]        = "delta=",
     [S2A_KEY_THETA]        = "theta=",
+    [S2A_KEY_KP_DELTA]     = "KPd=",
+    [S2A_KEY_KD_DELTA]     = "KDd=",
+    [S2A_KEY_KP_ALPHA]     = "KPa=",
+    [S2A_KEY_KD_ALPHA]     = "KDa=",
 
     [S2A_CMD_QUIT]         = "q",
     [S2A_CMD_HELP]         = "?",
@@ -24,4 +28,5 @@ char *s2a_keys[S2A_SIZE] = {
     [S2A_FCT_MODE_TENDU]   = "mode(tendu)",
     [S2A_FCT_MODE_COURBE]  = "mode(courbe)",
     [S2A_FCT_SET_POS]      = "set_pos()",
+    [S2A_FCT_SET_PID]      = "change_pid()",
 };
