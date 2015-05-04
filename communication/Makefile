@@ -92,7 +92,7 @@ BUILDIR = build
 OBJDIR = $(BUILDIR)/$(ARCH)/$(DEBUG)
 
 # Liste des fichiers sans prefix
-COMMON = a2s s2a text_emission text_reception
+COMMON = a2s s2a text_emission text_reception uart
 COMM_ASSER_FILE =  a2s_emission s2a_reception $(COMMON)
 COMM_STRATEGIE_FILE = a2s_reception s2a_emission $(COMMON)
 
@@ -132,7 +132,9 @@ $(OBJDIR)/s2a_reception.o: s2a.h s2a_emission.h ../debug.h ../../asservissement/
 
 $(OBJDIR)/text_reception.o: text_reception.h ../debug.h
 
-$(OBJDIR)/text_emission.o: hardware/$(ARCH)/text_emission.c text_emission.h
+$(OBJDIR)/text_emission.o: text_emission.h ../debug.h
+
+$(OBJDIR)/uart.o: hardware/$(ARCH)/uart.c uart.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJDIR)/%.o: %.c %.h | $(OBJDIR)

@@ -63,6 +63,7 @@ s2a.h
 internal_reception.h
 text_reception.h
 text_emission.h
+uart.h
 
 
 SOURCES
@@ -80,6 +81,7 @@ a2s.c
 s2a.c
 internal_reception.c
 text_reception.c
-hardware/$(ARCH)/text_emission.c
+text_emission.c
+hardware/$(ARCH)/uart.c
 
 ////////////////////////////////////////////////////////////////////////////////
