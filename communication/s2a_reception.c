@@ -59,8 +59,6 @@ static char *s2a_keys_help[S2A_SIZE] = {
     [S2A_FCT_ADD]          = "Ajoute les points x et y dans le prochain chemin",
     [S2A_FCT_CLEAR]        = "Efface le chemin en cours de construction",
     [S2A_FCT_CHEMIN]       = "Envoie le chemin précédemment construit",
-    [S2A_FCT_UPDATE]       = "met à jour les variables du protocole de simulation "
-            "pour qu'elles correspondent à celle utilisées par l'assert",
     [S2A_FCT_MODE_TENDU]   = "déplacement en mode tendu",
     [S2A_FCT_MODE_COURBE]  = "déplacement en mode courbe",
     [S2A_FCT_SET_POS]      = "défini la position du robot (x,y,theta)",
@@ -288,17 +286,6 @@ void s2a_lecture_message(char current_char)
                         }
                         set_trajectoire_chemin(chemin);
                         efface_chemin(&chemin);
-                        current_state = S2A_WAIT_NEW_LINE;
-                        break;
-
-                    case S2A_FCT_UPDATE:
-                        debug(_DEBUG_, "update()\n");
-                        theta = get_theta_actuel();
-                        x     = get_x_actuel();
-                        y     = get_y_actuel();
-                        alpha = get_alpha_actuel();
-                        delta = get_delta_actuel();
-                        debug(_DEBUG_, "Desormais, x = %d, y=%d, theta=%d, alpha=%d, delta=%d\n", x, y, theta, alpha, delta);
                         current_state = S2A_WAIT_NEW_LINE;
                         break;
 

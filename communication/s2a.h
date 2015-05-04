@@ -42,8 +42,6 @@ typedef enum {
     S2A_FCT_MODE_TENDU,     // set_trajectoire_mode(tendu);
     S2A_FCT_MODE_COURBE,    // set_trajectoire_mode(courbe);
 
-    S2A_FCT_UPDATE,         // met à jour les variables utilisées dans la simulation
-
     S2A_FCT_SET_POS,        // change la valeure actuelle de x,y et theta
 
     S2A_FCT_SET_PID,     // change les valeurs des PID
