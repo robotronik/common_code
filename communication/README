@@ -68,15 +68,15 @@ uart.h
 
 SOURCES
 
-    * À comipiler avec l'asservissement
+    * À compiler avec l'asservissement
 a2s_emission.c
 s2a_reception.c
 
-    * À comipiler avec la stratégie
+    * À compiler avec la stratégie
 a2s_reception.c
 s2a_emission.c
 
-    * À comipiler avec la stratégie et l'asservissement
+    * À compiler avec la stratégie et l'asservissement
 a2s.c
 s2a.c
 internal_reception.c
