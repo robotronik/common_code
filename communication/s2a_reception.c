@@ -5,10 +5,10 @@
 #include "../../asservissement/trajectoire.h"
 #include "../../asservissement/PID.h"
 
+#include "a2s.h"
 #include "s2a.h"
 #include "s2a_reception.h"
-#include "a2s_emission.h"
-#include "text_reception.h"
+#include "text_emission.h"
 #include "text_reception.h"
 
 /**
@@ -227,10 +227,10 @@ void s2a_lecture_message(char current_char)
                         break;
 
                     case S2A_CMD_GET_POS:
-                        a2s_send_message(A2S_VAL_X,get_x_actuel());
-                        a2s_send_message(A2S_VAL_Y,get_y_actuel());
-                        a2s_send_message(A2S_VAL_THETA,get_theta_actuel());
-                        a2s_send_message(A2S_CMD_SEND_POS);
+                        send_val(a2s_keys[A2S_VAL_X],get_x_actuel());
+                        send_val(a2s_keys[A2S_VAL_Y],get_y_actuel());
+                        send_val(a2s_keys[A2S_VAL_THETA],get_theta_actuel());
+                        send_fonction(a2s_keys[A2S_CMD_SEND_POS]);
                         current_state = S2A_WAIT_NEW_LINE;
                         break;
 
