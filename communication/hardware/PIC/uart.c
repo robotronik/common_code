@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include <p33FJ128MC802.h>
 
 #include "common_code/time.h"
