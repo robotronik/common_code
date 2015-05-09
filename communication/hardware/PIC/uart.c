@@ -1,11 +1,11 @@
 #include <p33FJ128MC802.h>
+#include <stdbool.h>
 
 #include "common_code/time.h"
 
 #include "uart.h"
 
-#define INT_UART_TX
-#define RX_BUFFER_SIZE 16
+#define RX_BUFFER_SIZE 40
 #define TX_BUFFER_SIZE 40
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,101 +16,104 @@
 static void UART_putc(unsigned char c);
 
 static unsigned char rxBuffer[RX_BUFFER_SIZE];
-static unsigned short indexRxBuffer = 0;
-static unsigned short rxBufferLength = 0;
+ unsigned short rxBufferDebut;
+ unsigned short rxBufferFin;
 
-#ifdef INT_UART_TX
 static unsigned char txBuffer[TX_BUFFER_SIZE];
-static unsigned short indexTxBuffer = 0;
-static unsigned short txBufferLength = 0;
-#endif
+static unsigned short txBufferDebut;
+static unsigned short txBufferFin;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 static void UART_putc(unsigned char c)
 {
-    while (U1STAbits.UTXBF);
-    U1TXREG = c;
+    /*while (U1STAbits.UTXBF);*/
+    txBuffer[txBufferFin] = c;
+    txBufferFin = (txBufferFin + 1) % TX_BUFFER_SIZE;
 
+    // On déclanche l'interruption correspondant au début d'écriture sur tx
+    // voir la fonction _U1TXInterrupt()
+    IFS0bits.U1TXIF = 1;
     return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void UART_send_message(char* message) {
-    char *actuel = message;
-    while (*actuel)
+void UART_send_message(char *msg, unsigned int nb_char)
+{
+    char *actuel = msg;
+    while (*actuel) {
         UART_putc(*actuel++);
-
-    // Il est bisarement necessaire de faire une pause après chaque envoie
-    pause_ms(1);
+    }
 }
 
 void UART_init()
 {
-    AD1PCFGLbits.PCFG5 = 1;	// Désactivation de l'entrée analogique !!!
-    RPOR1bits.RP2R = 3;							// Tx1 -> RP2
-    RPINR18bits.U1RXR = 3;						// RP3 -> Rx1
+    // initialisation des variables globales
+    rxBufferDebut = 0;
+    rxBufferFin = 0;
+    txBufferDebut = 0;
+    txBufferFin = 0;
 
-    //U1MODEbits.LPBACK = 1;	// Debug : Tx1 -> Rx1
+    AD1PCFGLbits.PCFG5 = 1; // Désactivation de l'entrée analogique !!!
+    RPOR1bits.RP2R = 3;     // Tx1 -> RP2
+    RPINR18bits.U1RXR = 3;  // RP3 -> Rx1
+
+    //U1MODEbits.LPBACK = 1;// Debug : Tx1 -> Rx1
 
     // Low speed : BRG = 79,23 MHz / 32 / Baudrate - 1
-    U1MODEbits.BRGH = 1;	// High speed : BRG = 79,23 MHz / 8 / Baudrate - 1
-    U1BRG = 85; 			// BAUD Rate Setting for 115200 gives 115160 bauds
+    U1MODEbits.BRGH = 1;    // High speed : BRG = 79,23 MHz / 8 / Baudrate - 1
+    U1BRG = 85;             // BAUD Rate Setting for 115200 gives 115160 bauds
 
-#ifdef INT_UART_TX
-    U1STAbits.UTXISEL1 = 1;	// Interrupt on empty FIFO, last byte is being sent
-    U1STAbits.UTXISEL0 = 0;	//                      "
-#endif //#ifdef INT_UART_TX
+    U1STAbits.UTXISEL1 = 1; // Interrupt on empty FIFO, last byte is being sent
+    U1STAbits.UTXISEL0 = 0; //                      "
 
-    IFS0bits.U1RXIF = 0; 	// On evite des interruptions à l'activation
-    IEC0bits.U1RXIE = 1;	// Activation de l'interruption sur réceptions
-#ifdef INT_UART_TX
+    IFS0bits.U1RXIF = 0;    // On evite des interruptions à l'activation
+    IEC0bits.U1RXIE = 1;    // Activation de l'interruption sur réceptions
     IFS0bits.U1TXIF = 0;
-    IEC0bits.U1TXIE = 1;	// Activation de l'interruption sur l'envoie
-#endif //#ifdef INT_UART_TX
-    //IFS4bits.U1EIF = 0;
-    //IEC4bits.U1EIE = 1;	// Activation de l'interruption sur erreurs
+    IEC0bits.U1TXIE = 1;    // Activation de l'interruption sur l'envoie
+    // IFS4bits.U1EIF = 0;
+    // IEC4bits.U1EIE = 1;     // Activation de l'interruption sur erreurs
 
-    U1MODEbits.UARTEN = 1; 	// Enable UART
-    U1STAbits.UTXEN = 1; 	// Enable UART TX
+    U1MODEbits.UARTEN = 1;  // Enable UART
+    U1STAbits.UTXEN = 1;    // Enable UART TX
 }
 
-int UART_getc(unsigned char *byte) {
-    if (rxBufferLength) {
-        *byte = rxBuffer[indexRxBuffer];
-        IEC0bits.U1RXIE = 0;    // Désactivation de l'interruption pour modifier les variables globales
-        rxBufferLength --;
-        indexRxBuffer ++; indexRxBuffer %= RX_BUFFER_SIZE;
-        IEC0bits.U1RXIE = 1;    // Activation de l'interruption
-        return 1;
+int UART_getc(unsigned char *c)
+{
+    if (rxBufferDebut == rxBufferFin) {
+        // Il n'y avait pas de caractères en attente
+        return false;
+    } else {
+        // Il y des caractères à traiter
+        *c = rxBuffer[rxBufferDebut];
+        rxBufferDebut = (rxBufferDebut + 1) % RX_BUFFER_SIZE;
+        return true;
     }
-    return 0;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Interruptions
 
 void __attribute__((interrupt, auto_psv)) _U1RXInterrupt()
 {
-    IFS0bits.U1RXIF = 0; // On s'acquitte de l'interruption
+    // On s'acquitte de l'interruption
+    IFS0bits.U1RXIF = 0;
 
-    if(U1STAbits.FERR == 1) // Erreurs ?
-        return ;
+    if(U1STAbits.FERR == 1) { // Erreurs ?
+        return;
+    }
     /* must clear the overrun error to keep uart receiving */
-    if(U1STAbits.OERR == 1)
-    {
+    if(U1STAbits.OERR == 1) {
         U1STAbits.OERR = 0;
-        return ;
+        return;
     }
 
-    // Attention, il ne faut accéder UNE SEULE fois au registre U1RXREG.
-    // get the data
-    /*
-       if(U1STAbits.URXDA == 1) {
-       rxBuffer[(indexRxBuffer + rxBufferLength) % RX_BUFFER_SIZE] = U1RXREG;
-       rxBufferLength ++;
-       }
-       */
-    if(U1STAbits.URXDA == 1)
-        s2a_lecture_message(U1RXREG);
+    // Attention, il ne faut accéder UNE SEULE fois au registre U1RXREG
+    if(U1STAbits.URXDA == 1) {
+        rxBuffer[rxBufferFin] = U1RXREG;
+        rxBufferFin = (rxBufferFin + 1) % RX_BUFFER_SIZE;
+    }
 }
 
 void __attribute__((interrupt, auto_psv)) _U1ErrInterrupt()
@@ -121,11 +124,8 @@ void __attribute__((interrupt, auto_psv)) _U1ErrInterrupt()
     // must clear the overrun error to keep uart receiving
     if(U1STAbits.OERR == 1)
         U1STAbits.OERR = 0;
-    //error();
-
 }
 
-#ifdef INT_UART_TX
 void __attribute__((interrupt, auto_psv)) _U1TXInterrupt()
 {
     IFS0bits.U1TXIF = 0; // On s'acquitte de l'interruption
@@ -139,10 +139,13 @@ void __attribute__((interrupt, auto_psv)) _U1TXInterrupt()
         return ;
     }
 
-    while (txBufferLength && !U1STAbits.UTXBF) {            // Si le buffer du module n'est pas plein
-        U1TXREG = txBuffer[indexTxBuffer];
-        txBufferLength --;
-        indexTxBuffer ++; indexTxBuffer %= TX_BUFFER_SIZE;
+    if(txBufferFin != txBufferDebut) {
+        // Si le buffer du module n'est pas vide
+
+        // on attends que le l'émission soit prête
+        while (U1STAbits.UTXBF);
+
+        U1TXREG = txBuffer[txBufferDebut];
+        txBufferDebut = (txBufferDebut + 1) % TX_BUFFER_SIZE;
     }
 }
-#endif //#ifdef INT_UART_TX
