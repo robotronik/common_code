@@ -38,7 +38,8 @@ PIC_LDFLAGS= -Wl,--script=p33FJ128MC802.gld,--stack=16,--check-sections,--data-i
 
 COMMON_DIR = ..
 COMMON_H   = $(COMMON_DIR)/debug.h
-UART_DIR   = $(COMMON_DIR)/uart/
+
+ASSER_DIR  = ../../asservissement
 
 ################################################################################
 
@@ -114,19 +115,19 @@ comm_strategie: $(OBJDIR)/comm_strategie.a
 $(OBJDIR)/comm_strategie.a: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_STRATEGIE_FILE)))
 	ar -q $@ $^
 
-$(OBJDIR)/a2s_reception.o: a2s.h text_reception.h ../debug.h
+$(OBJDIR)/a2s_reception.o: a2s.h text_reception.h $(COMMON_DIR)/debug.h
 
 $(OBJDIR)/a2s.o: a2s.h
 
-$(OBJDIR)/a2s_reception.o: a2s.h a2s_reception.h text_reception.h ../debug.h
+$(OBJDIR)/a2s_reception.o: a2s.h a2s_reception.h text_reception.h $(COMMON_DIR)/debug.h
 
 $(OBJDIR)/s2a.o: s2a.h
 
-$(OBJDIR)/s2a_reception.o: s2a.h ../debug.h ../../asservissement/trajectoire.h
+$(OBJDIR)/s2a_reception.o: s2a.h $(COMMON_DIR)/debug.h $(ASSER_DIR)/trajectoire.h
 
-$(OBJDIR)/text_reception.o: text_reception.h ../debug.h
+$(OBJDIR)/text_reception.o: text_reception.h $(COMMON_DIR)/debug.h
 
-$(OBJDIR)/text_emission.o: text_emission.h ../debug.h ../time.h
+$(OBJDIR)/text_emission.o: text_emission.h $(COMMON_DIR)/debug.h $(COMMON_DIR)/time.h
 
 $(OBJDIR)/uart.o: hardware/$(ARCH)/uart.c uart.h | $(OBJDIR)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(COMMON_DIR)/.. -I.

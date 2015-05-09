@@ -2,7 +2,7 @@
 
 #include <p33FJ128MC802.h>
 
-#include "../time.h"
+#include "common_code/time.h"
 
 #include "uart.h"
 
