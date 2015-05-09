@@ -128,11 +128,11 @@ $(OBJDIR)/text_reception.o: text_reception.h ../debug.h
 
 $(OBJDIR)/text_emission.o: text_emission.h ../debug.h
 
-$(OBJDIR)/uart.o: hardware/$(ARCH)/uart.c uart.h
-	$(CC) $(CFLAGS) -o $@ -c $<
+$(OBJDIR)/uart.o: hardware/$(ARCH)/uart.c uart.h | $(OBJDIR)
+	$(CC) $(CFLAGS) -o $@ -c $< -I$(COMMON_DIR)/.. -I.
 
 $(OBJDIR)/%.o: %.c %.h | $(OBJDIR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $@ -c $< -I$(COMMON_DIR)/.. -I.
 
 $(OBJDIR):
 	mkdir $(OBJDIR) $ -p
