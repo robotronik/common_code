@@ -17,5 +17,15 @@
  */
 void UART_send_message(char *msg, unsigned int nb_char);
 
+/**
+ * Intialisation de l'uart
+ */
+void UART_init();
+
+/*
+ * Lit un message en entrée
+ * \return le nombre d'octets lus
+ */
+int UART_getc(unsigned char *byte);
 
 #endif /* UART_H */
