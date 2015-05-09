@@ -126,7 +126,7 @@ $(OBJDIR)/s2a_reception.o: s2a.h ../debug.h ../../asservissement/trajectoire.h
 
 $(OBJDIR)/text_reception.o: text_reception.h ../debug.h
 
-$(OBJDIR)/text_emission.o: text_emission.h ../debug.h
+$(OBJDIR)/text_emission.o: text_emission.h ../debug.h ../time.h
 
 $(OBJDIR)/uart.o: hardware/$(ARCH)/uart.c uart.h | $(OBJDIR)
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(COMMON_DIR)/.. -I.

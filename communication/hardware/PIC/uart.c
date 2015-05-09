@@ -2,6 +2,8 @@
 
 #include <p33FJ128MC802.h>
 
+#include "../time.h"
+
 #include "uart.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,5 +29,8 @@ void UART_send_message(char* message) {
     char *actuel = message;
     while (*actuel)
         UART_putc(*actuel++);
+
+    // Il est bisarement necessaire de faire une pause après chaque envoie
+    pause_ms(1);
 }
 
