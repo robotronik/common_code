@@ -5,3 +5,4 @@ asser_robot.*
 .*~
 *.swp
 .*.swp
+build/
