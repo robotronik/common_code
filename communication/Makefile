@@ -12,9 +12,9 @@
 ################################################################################
 
 # Options
-export ARCH  = PC
-export ROBOT = gros
-export DEBUG = _WARNING_
+ARCH  = PC
+ROBOT = gros
+DEBUG = _WARNING_
 
 # Constantes de compilation
 
@@ -96,6 +96,10 @@ OBJDIR = $(BUILDIR)/$(ARCH)/$(DEBUG)
 COMMON = a2s s2a text_emission text_reception uart
 COMM_ASSER_FILE =  s2a_reception $(COMMON)
 COMM_STRATEGIE_FILE = a2s_reception $(COMMON)
+
+export ARCH
+export ROBOT
+export DEBUG
 
 default: all
 
