@@ -140,10 +140,10 @@ tarall: $(SOURCEFILES)
 
 clean:
 	@echo "Cleaning build directory…"
-	@find $(BUILDIR) -name '*.o' -or -name '*.a' -delete
+	@find $(BUILDIR) -name '*.o' -delete -o -name '*.a'
 	@rmdir -p --ignore-fail-on-non-empty $(BUILDIR)/*/* || true
 
 mrproper: clean
-	rm *.a
-	rm -rf $(EXEC) $(PIC_ELF) $(PIC_HEX) $(EXEC).tar.bz2
+	rm -f *.a
+	rm -f $(EXEC) $(PIC_ELF) $(PIC_HEX) $(EXEC).tar.bz2
 
