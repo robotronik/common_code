@@ -60,7 +60,8 @@ CFLAGS += -DDEBUG=$(DEBUG)
 
 COMMON_DIR = ../
 COMMON_H   = $(COMMON_DIR)/debug.h
-UART_DIR   = $(COMMON_DIR)/uart/
+
+ASSER_DIR  = ../../asservissement
 
 ################################################################################
 
@@ -81,6 +82,10 @@ OBJDIR = $(BUILDIR)/$(ARCH)/$(DEBUG)
 COMMON = a2s s2a text_emission text_reception uart
 COMM_ASSER_FILE =  s2a_reception $(COMMON)
 COMM_STRATEGIE_FILE = a2s_reception $(COMMON)
+
+export ARCH
+export ROBOT
+export DEBUG
 
 default: all
 
@@ -105,27 +110,27 @@ $(OBJDIR)/comm_strategie.a: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_STRAT
 	@echo "	AR	$@"
 	@ar -q $@ $^
 
-$(OBJDIR)/a2s_reception.o: a2s.h text_reception.h ../debug.h
+$(OBJDIR)/a2s_reception.o: a2s.h text_reception.h $(COMMON_DIR)/debug.h
 
 $(OBJDIR)/a2s.o: a2s.h
 
-$(OBJDIR)/a2s_reception.o: a2s.h a2s_reception.h text_reception.h ../debug.h
+$(OBJDIR)/a2s_reception.o: a2s.h a2s_reception.h text_reception.h $(COMMON_DIR)/debug.h
 
 $(OBJDIR)/s2a.o: s2a.h
 
-$(OBJDIR)/s2a_reception.o: s2a.h ../debug.h ../../asservissement/trajectoire.h
+$(OBJDIR)/s2a_reception.o: s2a.h $(COMMON_DIR)/debug.h $(ASSER_DIR)/trajectoire.h
 
-$(OBJDIR)/text_reception.o: text_reception.h ../debug.h
+$(OBJDIR)/text_reception.o: text_reception.h $(COMMON_DIR)/debug.h
 
-$(OBJDIR)/text_emission.o: text_emission.h ../debug.h
+$(OBJDIR)/text_emission.o: text_emission.h $(COMMON_DIR)/debug.h $(COMMON_DIR)/time.h
 
-$(OBJDIR)/uart.o: hardware/$(ARCH)/uart.c uart.h
+$(OBJDIR)/uart.o: hardware/$(ARCH)/uart.c uart.h | $(OBJDIR)
 	@echo "	CC	$@"
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) -o $@ -c $< -I$(COMMON_DIR)/.. -I.
 
 $(OBJDIR)/%.o: %.c %.h | $(OBJDIR)
 	@echo "	CC	$@"
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) -o $@ -c $< -I$(COMMON_DIR)/.. -I.
 
 $(OBJDIR):
 	mkdir $(OBJDIR) $ -p
