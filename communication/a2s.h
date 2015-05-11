@@ -50,11 +50,14 @@ typedef enum {
  * exemple:
  *     printf("done");
  * sera totalement équivalent à
- *     a2s_send_message(a2s_keys[A2S_DONE]);
+ *     printf(a2s_keys[A2S_DONE]);
+ * ou mieu, à
+ *     send_commande(A2S_DONE);
  * avec pour avantage que si la chaine correspondant à DONE change, cela sera
  * répercutté automatiquement
  *
  * \warning Ce tableau ne doit pas être modifié lors de l'exécution du programme
+ * \see text_emission.h
  */
 extern char *a2s_keys[A2S_SIZE];
 
