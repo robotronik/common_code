@@ -12,31 +12,53 @@
 ################################################################################
 
 # Options
-export ARCH  = PC
+export ARCH  = STM32
 export ROBOT = gros
 export DEBUG = _WARNING_
 
 # Constantes de compilation
 
-PC_EXEC    = asser_robot
+ifeq ($(ARCH), STM32)
+	PathSTM32 = ../../stm32f407/
+	include ../../stm32f407/stm32f407.mk
+	CFLAGS += -I./
+else
+ifeq ($(ARCH), PIC)
+	EXEC    = $(PC_EXEC).elf
+	PIC_HEX = $(PC_EXEC).hex
+	include ../dsPIC33F.mk
+else
+ifeq ($(ARCH), PC)
+	EXEC    = asser_robot
+	include ../PC.mk
 
-PC_CC      = gcc
-PC_CFLAGS  = -DPIC_BUILD=0 -W -Wall -std=c99 -fdiagnostics-color=auto -I.
-PC_LDFLAGS = -lm -lpthread
+	ifeq ($(SDL),yes)
+		CFLAGS      += $(PC_SDL_CF)
+		LDFLAGS     += $(PC_SDL_LDF)
+		FICHIERS_C  += $(FICHIER_AFFICHAGE_C)
+	endif
+else
+#Erreur !
+error:
+	@echo "Mauvaise ARCH !"
+	exit 1
+endif
+endif
+endif
 
-PIC_ELF    = $(PC_EXEC).elf
-PIC_HEX    = $(PC_EXEC).hex
-PIC_CC     = /opt/xc16-toolchain-bin/bin/xc16-gcc
-PIC_ELF2HEX= /opt/xc16-toolchain-bin/bin/xc16-bin2hex
+ifeq ($(ROBOT),petit)
+	CFLAGS  += -DGROS=0 -DPETIT=1
+else
+	CFLAGS  += -DGROS=1 -DPETIT=0
+endif
+CFLAGS += -DDEBUG=$(DEBUG)
 
-PIC_CFLAGS = -DPIC_BUILD=1 -W -Wall -std=c99 -O0 -mcpu=33FJ128MC802 -omf=elf -msmart-io=1
-PIC_LDFLAGS= -Wl,--script=p33FJ128MC802.gld,--stack=16,--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,--report-mem
 
 ################################################################################
 
 # Modules externe
 
-COMMON_DIR = ..
+COMMON_DIR = ../
 COMMON_H   = $(COMMON_DIR)/debug.h
 UART_DIR   = $(COMMON_DIR)/uart/
 
@@ -44,42 +66,6 @@ UART_DIR   = $(COMMON_DIR)/uart/
 
 # Gestion des options
 
-ifeq ($(ARCH), PIC)
-	EXEC    = $(PIC_ELF)
-	CC      = $(PIC_CC)
-	CFLAGS  = $(PIC_CFLAGS)
-	LDFLAGS = $(PIC_LDFLAGS)
-
-	F_HARDWARE_C = hardware_PIC.c
-	F_REGLAGES_H = reglages_PC.h
-
-	ifeq ($(ROBOT),petit)
-		CFLAGS  += -DGROS=0 -DPETIT=1
-	else
-		CFLAGS  += -DGROS=1 -DPETIT=0
-	endif
-endif
-
-ifeq ($(ARCH), PC)
-	EXEC    = $(PC_EXEC)
-	CC      = $(PC_CC)
-	CFLAGS  = $(PC_CFLAGS)
-	LDFLAGS = $(PC_LDFLAGS)
-
-	F_HARDWARE_C = hardware_PC.c
-	F_REGLAGES_H = reglages_PC.h
-
-	ifeq ($(SDL),yes)
-		CFLAGS      += $(PC_SDL_CF)
-		LDFLAGS     += $(PC_SDL_LDF)
-		FICHIERS_C  += $(FICHIER_AFFICHAGE_C)
-	endif
-endif
-
-CFLAGS += -DDEBUG=$(DEBUG) -g
-
-ifeq ($(ARCH), STM32)
-endif
 
 ################################################################################
 
@@ -107,12 +93,17 @@ all: comm_asser comm_strategie
 comm_asser: $(OBJDIR)/comm_asser.a
 
 $(OBJDIR)/comm_asser.a: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_ASSER_FILE)))
-	ar -q $@ $^
+	@echo "	AR	$@"
+	@ar -q $@ $^
 
-comm_strategie: $(OBJDIR)/comm_strategie.a
+comm_strategie: comm_strategie.a
+
+comm_strategie.a: $(OBJDIR)/comm_strategie.a
+	cp $^ $@
 
 $(OBJDIR)/comm_strategie.a: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(COMM_STRATEGIE_FILE)))
-	ar -q $@ $^
+	@echo "	AR	$@"
+	@ar -q $@ $^
 
 $(OBJDIR)/a2s_reception.o: a2s.h text_reception.h ../debug.h
 
@@ -129,10 +120,12 @@ $(OBJDIR)/text_reception.o: text_reception.h ../debug.h
 $(OBJDIR)/text_emission.o: text_emission.h ../debug.h
 
 $(OBJDIR)/uart.o: hardware/$(ARCH)/uart.c uart.h
-	$(CC) $(CFLAGS) -o $@ -c $<
+	@echo "	CC	$@"
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJDIR)/%.o: %.c %.h | $(OBJDIR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+	@echo "	CC	$@"
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJDIR):
 	mkdir $(OBJDIR) $ -p
@@ -146,8 +139,11 @@ tarall: $(SOURCEFILES)
 	tar -jcvf $(EXEC).tar.bz2 $^
 
 clean:
-	find $(BUILDIR) -name '*.o' -delete 2>/dev/null && find $(BUILDIR) -name '*.a' -delete 2>/dev/null && rmdir -p --ignore-fail-on-non-empty $(BUILDIR)/*/* || true
+	@echo "Cleaning build directory…"
+	@find $(BUILDIR) -name '*.o' -or -name '*.a' -delete
+	@rmdir -p --ignore-fail-on-non-empty $(BUILDIR)/*/* || true
 
 mrproper: clean
+	rm *.a
 	rm -rf $(EXEC) $(PIC_ELF) $(PIC_HEX) $(EXEC).tar.bz2
 

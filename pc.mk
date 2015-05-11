@@ -6,7 +6,7 @@
 
 # Options
 # PC ou STM32
-export ARCH  = PIC
+export ARCH  = PC
 # yes ou no
 export SDL   = no
 # Niveaux de débug
