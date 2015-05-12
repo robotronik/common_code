@@ -29,7 +29,7 @@ OBJ2HEX =
 LINKER  = 
 
 # Précise la carte cible
-TARGET  = -mcpu=33FJ128MC802
+
 
 #               Includes
 # Indique au compilateur dans quels répertoires chercher les headers appelés
@@ -43,7 +43,7 @@ INCLUDE = -I.
 
 
 
-OTHER_OPTIONS = -mlittle-endian -mthumb
+OTHER_OPTIONS =
 #-mthumb-interwork
 
 

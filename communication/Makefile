@@ -145,8 +145,10 @@ tarall: $(SOURCEFILES)
 
 clean:
 	@echo "Cleaning build directory…"
-	@find $(BUILDIR) -name '*.o' -delete -o -name '*.a'
-	@rmdir -p --ignore-fail-on-non-empty $(BUILDIR)/*/* || true
+	@find $(BUILDIR) -name '*.o' -delete
+	@find $(BUILDIR) -name '*.a' -delete	
+	@rm -f *.a
+	#@rmdir -p --ignore-fail-on-non-empty $(BUILDIR)/*/* || true
 
 mrproper: clean
 	rm -f *.a
