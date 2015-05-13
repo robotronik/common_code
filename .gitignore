@@ -1,4 +1,5 @@
 *.o
+*.a
 asser_robot
 asser_robot.*
 *~
