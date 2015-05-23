@@ -1,31 +1,27 @@
+PROJECT=     libCommon
+
 # Options
-export ARCH  = PIC
+export ARCH  = dsPIC
 export ROBOT = gros
 export SDL   = yes
 export DEBUG = _WARNING_
 
-################################################################################
+export PARENT_DIR = ../
+include $(PARENT_DIR)/common_code/common.mk
+
 
 # dossier de compilation
-BUILDIR = build
-OBJDIR = $(BUILDIR)/$(ARCH)/$(DEBUG)
-
-################################################################################
-# Flags dépendant des architectures
-
-ifeq ($(ARCH), PIC)
-	CFLAGS += -DPIC_BUILD=1 -W -Wall -std=c99 -O0 -mcpu=33FJ128MC802 -omf=elf -msmart-io=1
-	LDFLAGS = -Wl,--script=p33FJ128MC802.gld,--stack=16,--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,--report-mem
-	CC      = /opt/xc16-toolchain-bin/bin/xc16-gcc
-	ELF2HEX = /opt/xc16-toolchain-bin/bin/xc16-bin2hex
-endif
+BUILD_DIR = build/$(ARCH)/$(DEBUG)
 
 ################################################################################
 
-LIB_FILE = 
-
-ifeq ($(ARCH), PIC)
+ifeq ($(ARCH), dsPIC)
 	LIB_FILE += time
+endif
+ifeq ($(ARCH), PC)
+	ifeq ($(SDL), yes)
+		LIB_FILE += simulation/affichage
+	endif
 endif
 
 ################################################################################
@@ -33,24 +29,28 @@ endif
 all: libCommon
 	@echo fin du build pour $(ARCH)
 
-libCommon: $(OBJDIR)/libCommon.a | $(OBJDIR)
+libCommon: $(BUILD_DIR)/libCommon.a | $(BUILD_DIR)
 
-ifeq ($(ARCH), $(filter $(ARCH), PC STM32))
-libCommon:
-	touch $(OBJDIR)/libCommon.a # pour les archi qui ne fabriquent pas encore le .a (rien a mettre dedans)
-endif
+$(BUILD_DIR)/libCommon.a: $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(notdir $(LIB_FILE)))) | $(BUILD_DIR)
+	@echo "	AR	$(PROJECT)|$(notdir $@)"
+	$(AR) -q $@ $^
+	@echo "	RANLIB	$(PROJECT)|$(notdir $@)"
+	@$(RANLIB) $@
 
-$(OBJDIR)/libCommon.a: $(addprefix $(OBJDIR)/, $(addsuffix .o, $(LIB_FILE))) | $(OBJDIR)
-	ar -q $@ $^
+$(BUILD_DIR)/affichage.o: simulation/affichage.c
+	@echo "	CC	$(PROJECT)|$(notdir $@)"
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
-$(OBJDIR)/time.o: hardware/$(ARCH)/time.c | $(OBJDIR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+$(BUILD_DIR)/time.o: hardware/$(ARCH)/time.c | $(BUILD_DIR)
+	@echo "	CC	$(PROJECT)|$(notdir $@)"
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
-$(OBJDIR)/%.o: %.c %.h | $(OBJDIR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+$(BUILD_DIR)/%.o: %.c %.h | $(BUILD_DIR)
+	@echo "	CC	$(PROJECT)|$(notdir $@)"
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
-$(OBJDIR):
-	mkdir $(OBJDIR) $ -p
+$(BUILD_DIR):
+	@mkdir $(BUILD_DIR) $ -p
 
 ################################################################################
 
@@ -58,8 +58,11 @@ $(OBJDIR):
 .PHONY: tarall clean mrproper
 
 clean:
-	find $(BUILDIR) -name '*.o' -delete 2>/dev/null && find $(BUILDIR) -name '*.a' -delete 2>/dev/null && rmdir -p --ignore-fail-on-non-empty $(BUILDIR)/*/* || true
+	@echo "Cleaning $(PROJECT) directory…"
+	@find $(BUILDIR) -name '*.o' -delete
+	@find $(BUILDIR) -name '*.a' -delete
+	@rmdir -p --ignore-fail-on-non-empty $(BUILD_DIR)/*/* 2>/dev/null || true
 
 mrproper: clean
-	rm -rf $(EXEC) $(PIC_ELF) $(PIC_HEX) $(EXEC).tar.bz2
-
+	@echo "Hard-cleaning  $(PROJECT) directory…"
+	@rm -rf $(EXEC) $(PIC_ELF) $(PIC_HEX) $(EXEC).tar.bz2
