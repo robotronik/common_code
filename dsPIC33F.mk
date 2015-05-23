@@ -2,9 +2,9 @@
 # Makefile générique, appelé par la lib et les projets parallèles
 # Default Options
 export ARCH  = dsPIC
-export ROBOT = gros
-export SDL   = no
-export DEBUG = _ALWAYS_
+export ROBOT
+export SDL
+export DEBUG
 
 ################################################################################
 # Compilateur C et linker

@@ -53,9 +53,9 @@ $(BUILD_DIR):
 	@mkdir $(BUILD_DIR) $ -p
 
 ################################################################################
-
 # Cibles génériques
-.PHONY: tarall clean mrproper
+
+.PHONY: clean mrproper
 
 clean:
 	@echo "Cleaning $(PROJECT) directory…"
