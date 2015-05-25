@@ -1,5 +1,5 @@
-PROJECT=     libCommon
-
+PROJECT= libCommon
+default: all
 # Options
 export ARCH  = dsPIC
 export ROBOT = gros
@@ -8,7 +8,6 @@ export DEBUG = _WARNING_
 
 export PARENT_DIR = ../
 include $(PARENT_DIR)/common_code/common.mk
-
 
 
 
@@ -33,22 +32,12 @@ endif
 
 FICHIERS_O = $(addprefix $(BUILD_DIR)/, $(FICHIERS_C:.c=.o) )
 ################################################################################
-.PHONY: $(BUILD_DIR)
 
 all: libCommon
 
 libCommon: $(BUILD_DIR)/libCommon.a
 
 $(BUILD_DIR)/libCommon.a: $(FICHIERS_O)
-	@echo "	AR	$(PROJECT)|$(notdir $@)"
-	@rm -f $@
-	@$(AR) -r $@ $^
-	@echo "	RANLIB	$(PROJECT)|$(notdir $@)"
-	@$(RANLIB) $@
-
-$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
-	@echo "	CC	$(PROJECT)|$(notdir $@)"
-	@$(CC) $(CFLAGS) -o $@ -c $<
 
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
@@ -59,12 +48,6 @@ $(BUILD_DIR):
 # Cibles génériques
 
 .PHONY: clean mrproper
-
-clean:
-	@echo "Cleaning $(PROJECT) directory…"
-	@find $(BUILD_DIR) -name '*.o' -delete
-	@find $(BUILD_DIR) -name '*.a' -delete
-	@rmdir -p --ignore-fail-on-non-empty $(BUILD_DIR)/*/* 2>/dev/null || true
 
 mrproper: clean
 	@echo "Hard-cleaning  $(PROJECT) directory…"

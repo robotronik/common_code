@@ -46,3 +46,34 @@ endif
 # -I$(COMMON_DIR)	\
 # -I$(COMMON_DIR)/communication/	\
 # -I$(STM32_DIR)/headers/	\
+
+
+################################################################################
+# Common Rules
+
+
+# Compile an object file
+$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
+	@echo "	CC	$(PROJECT)|$(notdir $@)"
+	@$(CC) $(CFLAGS) -o $@ -c $<
+
+# Compile a static library
+$(BUILD_DIR)/%.a:
+	@echo "	AR	$(PROJECT)|$(notdir $@)"
+	@rm -f $@
+	@$(AR) -r $@ $^
+	@echo "	RANLIB	$(PROJECT)|$(notdir $@)"
+	@$(RANLIB) $@
+
+################################################################################
+# Clean the current working directory
+.PHONY: clean mrproper
+
+clean:
+	@echo "Cleaning $(PROJECT) directory…"
+	@rm -rf build/
+# clean:
+# 	@echo "Cleaning $(PROJECT) directory…"
+# 	@find $(BUILD_DIR) -name '*.o' -delete
+# 	@find $(BUILD_DIR) -name '*.a' -delete
+# 	@rmdir -p --ignore-fail-on-non-empty $(BUILD_DIR)/*/* 2>/dev/null || true
