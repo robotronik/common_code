@@ -1,7 +1,7 @@
 PROJECT=     libCommon
 
 # Options
-export ARCH  = dsPIC
+export ARCH  = PC
 export ROBOT = gros
 export SDL   = yes
 export DEBUG = _WARNING_
@@ -14,16 +14,21 @@ include $(PARENT_DIR)/common_code/common.mk
 BUILD_DIR = build/$(ARCH)/$(DEBUG)
 
 ################################################################################
+FICHIERS_C =
+FICHIERS_H =
 
 ifeq ($(ARCH), dsPIC)
-	LIB_FILE += time
+	FICHIERS_C += $(ARCH)/time.c
+	FICHIERS_H += time.h
 endif
 ifeq ($(ARCH), PC)
 	ifeq ($(SDL), yes)
-		LIB_FILE += simulation/affichage
+		FICHIERS_C += simulation/affichage.c
+		FICHIERS_H += simulation/affichage.h
 	endif
 endif
 
+FICHIERS_O = $(addprefix $(BUILD_DIR)/, $(FICHIERS_C:.c=.o) )
 ################################################################################
 
 all: libCommon
@@ -31,26 +36,20 @@ all: libCommon
 
 libCommon: $(BUILD_DIR)/libCommon.a | $(BUILD_DIR)
 
-$(BUILD_DIR)/libCommon.a: $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(notdir $(LIB_FILE)))) | $(BUILD_DIR)
+$(BUILD_DIR)/libCommon.a: $(FICHIERS_O) | $(BUILD_DIR)
 	@echo "	AR	$(PROJECT)|$(notdir $@)"
 	$(AR) -q $@ $^
 	@echo "	RANLIB	$(PROJECT)|$(notdir $@)"
 	@$(RANLIB) $@
 
-$(BUILD_DIR)/affichage.o: simulation/affichage.c
-	@echo "	CC	$(PROJECT)|$(notdir $@)"
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(BUILD_DIR)/time.o: hardware/$(ARCH)/time.c | $(BUILD_DIR)
-	@echo "	CC	$(PROJECT)|$(notdir $@)"
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(BUILD_DIR)/%.o: %.c %.h | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 	@echo "	CC	$(PROJECT)|$(notdir $@)"
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
 $(BUILD_DIR):
-	@mkdir $(BUILD_DIR) $ -p
+	@mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/simulation
+	@mkdir -p $(BUILD_DIR)/hardware
 
 ################################################################################
 # Cibles génériques
