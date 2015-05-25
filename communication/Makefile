@@ -34,7 +34,8 @@ $(BUILD_DIR)/libCommStrat.a: $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(COMM_S
 
 $(BUILD_DIR)/%.a:
 	@echo "	AR	$(PROJECT)|$(notdir $@)"
-	@$(AR) -q $@ $^
+	@rm -f $@
+	@$(AR) -r $@ $^
 	@echo "	RANLIB	$(PROJECT)|$(notdir $@)"
 	@$(RANLIB) $@
 

@@ -41,7 +41,8 @@ libCommon: $(BUILD_DIR)/libCommon.a
 
 $(BUILD_DIR)/libCommon.a: $(FICHIERS_O)
 	@echo "	AR	$(PROJECT)|$(notdir $@)"
-	@$(AR) -q $@ $^
+	@rm -f $@
+	@$(AR) -r $@ $^
 	@echo "	RANLIB	$(PROJECT)|$(notdir $@)"
 	@$(RANLIB) $@
 
