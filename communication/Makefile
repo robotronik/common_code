@@ -17,7 +17,7 @@ EXEC    = libCommunication
 ################################################################################
 # Fichiers du projet
 
-COMMON = a2s s2a text_emission text_reception uart
+COMMON = a2s s2a text_emission text_reception hardware/$(ARCH)/uart
 COMM_ASSER_FILE = s2a_reception $(COMMON)
 COMM_STRAT_FILE = a2s_reception $(COMMON)
 
@@ -48,16 +48,13 @@ $(BUILD_DIR)/s2a_reception.o: s2a.h s2a_reception.h text_reception.h $(COMMON_DI
 $(BUILD_DIR)/text_reception.o: text_reception.h $(COMMON_DIR)/debug.h
 $(BUILD_DIR)/text_emission.o:  text_emission.h  $(COMMON_DIR)/debug.h $(COMMON_DIR)/time.h
 
-$(BUILD_DIR)/%.o: %.c %.h | $(BUILD_DIR)
-	@echo "	CC	$(PROJECT)|$(notdir $@)"
-	@$(CC) $(CFLAGS) -o $@ -c $<
-
-$(BUILD_DIR)/uart.o: hardware/$(ARCH)/uart.c uart.h | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 	@echo "	CC	$(PROJECT)|$(notdir $@)"
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
 $(BUILD_DIR):
-	@mkdir $(BUILD_DIR) $ -p
+	@mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/hardware/$(ARCH)
 
 ################################################################################
 
@@ -67,7 +64,7 @@ $(BUILD_DIR):
 clean:
 	@echo "Cleaning build directory…"
 	@find $(BUILDIR) -name '*.o' -delete
-	@find $(BUILDIR) -name '*.a' -delete	
+	@find $(BUILDIR) -name '*.a' -delete
 	@rm -f *.a
 
 mrproper: clean

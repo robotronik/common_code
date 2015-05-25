@@ -1,7 +1,7 @@
 PROJECT=     libCommon
 
 # Options
-export ARCH  = PC
+export ARCH  = dsPIC
 export ROBOT = gros
 export SDL   = yes
 export DEBUG = _WARNING_
@@ -10,15 +10,18 @@ export PARENT_DIR = ../
 include $(PARENT_DIR)/common_code/common.mk
 
 
-# dossier de compilation
-BUILD_DIR = build/$(ARCH)/$(DEBUG)
+
+
+
 
 ################################################################################
+# Fichiers du projet
+
 FICHIERS_C =
 FICHIERS_H =
 
 ifeq ($(ARCH), dsPIC)
-	FICHIERS_C += $(ARCH)/time.c
+	FICHIERS_C += hardware/$(ARCH)/time.c
 	FICHIERS_H += time.h
 endif
 ifeq ($(ARCH), PC)
@@ -30,15 +33,15 @@ endif
 
 FICHIERS_O = $(addprefix $(BUILD_DIR)/, $(FICHIERS_C:.c=.o) )
 ################################################################################
+.PHONY: $(BUILD_DIR)
 
 all: libCommon
-	@echo fin du build pour $(ARCH)
 
-libCommon: $(BUILD_DIR)/libCommon.a | $(BUILD_DIR)
+libCommon: $(BUILD_DIR)/libCommon.a
 
-$(BUILD_DIR)/libCommon.a: $(FICHIERS_O) | $(BUILD_DIR)
+$(BUILD_DIR)/libCommon.a: $(FICHIERS_O)
 	@echo "	AR	$(PROJECT)|$(notdir $@)"
-	$(AR) -q $@ $^
+	@$(AR) -q $@ $^
 	@echo "	RANLIB	$(PROJECT)|$(notdir $@)"
 	@$(RANLIB) $@
 
@@ -49,7 +52,7 @@ $(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
 	@mkdir -p $(BUILD_DIR)/simulation
-	@mkdir -p $(BUILD_DIR)/hardware
+	@mkdir -p $(BUILD_DIR)/hardware/$(ARCH)
 
 ################################################################################
 # Cibles génériques
@@ -58,8 +61,8 @@ $(BUILD_DIR):
 
 clean:
 	@echo "Cleaning $(PROJECT) directory…"
-	@find $(BUILDIR) -name '*.o' -delete
-	@find $(BUILDIR) -name '*.a' -delete
+	@find $(BUILD_DIR) -name '*.o' -delete
+	@find $(BUILD_DIR) -name '*.a' -delete
 	@rmdir -p --ignore-fail-on-non-empty $(BUILD_DIR)/*/* 2>/dev/null || true
 
 mrproper: clean
