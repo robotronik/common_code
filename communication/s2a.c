@@ -11,7 +11,6 @@ char *s2a_keys[S2A_SIZE] = {
     [S2A_KEY_KP_ALPHA]     = "KPa=",
     [S2A_KEY_KD_ALPHA]     = "KDa=",
 
-    [S2A_CMD_QUIT]         = "q",
     [S2A_CMD_HELP]         = "?",
     [S2A_CMD_GET_POS]      = "get_pos()",
     [S2A_CMD_EMERGENCY_STOP] = "estop",
