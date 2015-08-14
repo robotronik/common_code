@@ -1,13 +1,13 @@
 PROJECT= libCommon
 default: all
 # Options
-export ARCH  = dsPIC
+export ARCH  = dsPIC33F
 export ROBOT = gros
 export SDL   = yes
 export DEBUG = _WARNING_
 
 export PARENT_DIR = ../
-include $(PARENT_DIR)/common_code/common.mk
+include $(PARENT_DIR)/hardware/common.mk
 
 
 

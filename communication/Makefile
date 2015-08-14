@@ -1,13 +1,13 @@
 PROJECT=communication
 default: all
 # Default Options
-export ARCH  = STM32F407
+export ARCH  = stm32f407
 export ROBOT = gros
 export SDL   = yes
 export DEBUG = _WARNING_
 
 export PARENT_DIR = ../../
-include $(PARENT_DIR)/common_code/common.mk
+include $(PARENT_DIR)/hardware/common.mk
 
 # Constantes de compilation
 EXEC    = libCommunication
@@ -17,7 +17,7 @@ EXEC    = libCommunication
 ################################################################################
 # Fichiers du projet
 
-COMMON = a2s s2a text_emission text_reception hardware/$(ARCH)/uart
+COMMON = a2s s2a text_emission text_reception
 COMM_ASSER_FILE = s2a_reception $(COMMON)
 COMM_STRAT_FILE = a2s_reception $(COMMON)
 
@@ -39,7 +39,7 @@ $(BUILD_DIR)/s2a.o: s2a.h
 $(BUILD_DIR)/s2a_reception.o: s2a.h s2a_reception.h text_reception.h $(COMMON_DIR)/debug.h $(ASSER_DIR)/trajectoire.h
 
 $(BUILD_DIR)/text_reception.o: text_reception.h $(COMMON_DIR)/debug.h
-$(BUILD_DIR)/text_emission.o:  text_emission.h  $(COMMON_DIR)/debug.h $(COMMON_DIR)/time.h
+$(BUILD_DIR)/text_emission.o:  text_emission.h  $(COMMON_DIR)/debug.h
 
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
