@@ -1,18 +1,13 @@
 PROJECT=communication
 default: all
 # Default Options
-export ARCH  = stm32f407
-export ROBOT = gros
-export SDL   = yes
-export DEBUG = _WARNING_
+export ARCH  ?= stm32f407
+export ROBOT ?= gros
+export SDL   ?= yes
+export DEBUG ?= _WARNING_
 
 export PARENT_DIR = ../../
 include $(PARENT_DIR)/hardware/common.mk
-
-# Constantes de compilation
-EXEC    = libCommunication
-
-
 
 ################################################################################
 # Fichiers du projet
@@ -50,4 +45,4 @@ $(BUILD_DIR):
 
 mrproper: clean
 	rm -f *.a
-	rm -f $(EXEC) $(PIC_ELF) $(PIC_HEX)
+	rm -f $(PIC_ELF) $(PIC_HEX)
