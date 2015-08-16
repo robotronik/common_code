@@ -1,6 +1,5 @@
 #include "../debug.h"
 
-#include "../../asservissement/match.h"
 #include "../../asservissement/odometrie.h"
 #include "../../asservissement/trajectoire.h"
 #include "../../asservissement/PID.h"
@@ -46,7 +45,6 @@ static char *s2a_keys_help[S2A_SIZE] = {
     [S2A_KEY_KP_ALPHA]     = "coefficient KP du PID pour alpha",
     [S2A_KEY_KD_ALPHA]     = "coefficient KD du PID pour alpha",
 
-    [S2A_CMD_QUIT]         = "quitter la simulation",
     [S2A_CMD_HELP]         = "affiche l'aide",
     [S2A_CMD_GET_POS]      = "demande x,y et theta actuel",
     [S2A_CMD_EMERGENCY_STOP]="arrêt d'urgence",
@@ -212,13 +210,6 @@ void s2a_lecture_message(char current_char)
                    case S2A_KEY_KD_ALPHA:
                         kd_alpha = 0;
                         current_state = S2A_WAIT_KD_ALPHA;
-                        break;
-
-                    case S2A_CMD_QUIT:
-                        // fin du match
-                        // NB: ce cas n'est normalement pas à être géré par l'assert
-                        debug(_DEBUG_, "FIN DU MATCH\n");
-                        match_set_etat(MATCH_FIN);
                         break;
 
                     case S2A_CMD_HELP:
