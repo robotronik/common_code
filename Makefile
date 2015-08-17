@@ -19,10 +19,6 @@ include $(PARENT_DIR)/hardware/common.mk
 FICHIERS_C =
 FICHIERS_H =
 
-ifeq ($(ARCH), dsPIC)
-	FICHIERS_C += hardware/$(ARCH)/time.c
-	FICHIERS_H += time.h
-endif
 ifeq ($(ARCH), PC)
 	ifeq ($(SDL), yes)
 		FICHIERS_C += simulation/affichage.c
