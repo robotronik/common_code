@@ -1,18 +1,18 @@
 PROJECT= libCommon
-default: all
+default: libCommon
 # Options
-export ARCH  = dsPIC33F
-export ROBOT = gros
-export SDL   = yes
-export DEBUG = _WARNING_
+export ARCH  ?= dsPIC33F
+export ROBOT ?= gros
+export SDL   ?= yes
+export DEBUG ?= _WARNING_
 
-export PARENT_DIR = ../
+PARENT_DIR = ../
+
+# Constantes de compilation
+LIBCOMMON=libCommon.a
+
+
 include $(PARENT_DIR)/hardware/common.mk
-
-
-
-
-
 ################################################################################
 # Fichiers du projet
 
@@ -27,9 +27,9 @@ ifeq ($(ARCH), PC)
 endif
 
 FICHIERS_O = $(addprefix $(BUILD_DIR)/, $(FICHIERS_C:.c=.o) )
+
 ################################################################################
 
-all: libCommon
 
 libCommon: $(BUILD_DIR)/libCommon.a
 
@@ -38,13 +38,10 @@ $(BUILD_DIR)/libCommon.a: $(FICHIERS_O)
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
 	@mkdir -p $(BUILD_DIR)/simulation
-	@mkdir -p $(BUILD_DIR)/hardware/$(ARCH)
 
 ################################################################################
 # Cibles génériques
 
-.PHONY: clean mrproper
-
 mrproper: clean
 	@echo "Hard-cleaning  $(PROJECT) directory…"
-	@rm -rf $(EXEC) $(PIC_ELF) $(PIC_HEX) $(EXEC).tar.bz2
+	@rm -rf $(EXEC)

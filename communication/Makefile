@@ -6,9 +6,13 @@ export ROBOT ?= gros
 export SDL   ?= yes
 export DEBUG ?= _WARNING_
 
-export PARENT_DIR = ../../
-include $(PARENT_DIR)/hardware/common.mk
+PARENT_DIR = ../../
 
+
+
+
+
+include $(PARENT_DIR)/hardware/common.mk
 ################################################################################
 # Fichiers du projet
 
@@ -38,11 +42,9 @@ $(BUILD_DIR)/text_emission.o:  text_emission.h  $(COMMON_DIR)/debug.h
 
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
-	@mkdir -p $(BUILD_DIR)/hardware/$(ARCH)
 
 ################################################################################
 # Cibles génériques
 
 mrproper: clean
 	rm -f *.a
-	rm -f $(PIC_ELF) $(PIC_HEX)
