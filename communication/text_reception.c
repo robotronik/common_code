@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../debug.h"
+#include "../../hardware/debug.h"
 
 #include "text_reception.h"
 

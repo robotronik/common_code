@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "../debug.h"
+#include "../../hardware/debug.h"
 
 #include "text_emission.h"
 #include "uart.h"

@@ -1,4 +1,4 @@
-#include "../debug.h"
+#include "../../hardware/debug.h"
 
 #include "../../asservissement/odometrie.h"
 #include "../../asservissement/trajectoire.h"

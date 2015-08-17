@@ -1,4 +1,4 @@
-#include "../debug.h"
+#include "../../hardware/debug.h"
 
 #include "a2s.h"
 #include "a2s_reception.h"
