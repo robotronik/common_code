@@ -47,4 +47,4 @@ $(BUILD_DIR):
 # Cibles génériques
 
 mrproper: clean
-	rm -f *.a
+	@rm -f *.a
