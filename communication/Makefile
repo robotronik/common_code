@@ -43,9 +43,3 @@ $(BUILD_DIR)/text_emission.o:  text_emission.h
 
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
-
-################################################################################
-# Cibles génériques
-
-mrproper: clean
-	@rm -f *.a
