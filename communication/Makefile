@@ -24,9 +24,10 @@ COMM_STRAT_FILE = a2s_reception $(COMMON)
 # Compilation
 
 all: libCommAsser libCommStrat
+.PHONY: _libCommAsser _libCommStrat
 
-libCommAsser: $(BUILD_DIR)/libCommAsser.a
-libCommStrat: $(BUILD_DIR)/libCommStrat.a
+_libCommAsser: $(BUILD_DIR)/libCommAsser.a
+_libCommStrat: $(BUILD_DIR)/libCommStrat.a
 
 $(BUILD_DIR)/libCommAsser.a: $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(COMM_ASSER_FILE)))
 $(BUILD_DIR)/libCommStrat.a: $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(COMM_STRAT_FILE)))
