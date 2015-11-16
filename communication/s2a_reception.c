@@ -76,29 +76,32 @@ void add_point(int x, int y, s_liste *chemin);
 
 void s2a_help()
 {
-    info("\n-------------------------------\n");
-    info("Liste des commandes supportées:\n\n");
+    UART_send_message("\n-------------------------------\n");
+    UART_send_message("Liste des commandes supportées:\n\n");
+
+    char* buff[100];
 
     for (int i = 0; i < S2A_SIZE; i++) {
         if (i == 0) {
-            info("    VARIABLES: attends un entier (pouvant être précédé d'un `-`) en paramêtre\n");
+            UART_send_message("    VARIABLES: attends un entier (pouvant être précédé d'un `-`) en paramêtre\n");
         } else if (i == S2A_VAL_MAX_INDEX + 1) {
-            info("    COMMANDES: pas de paramètre\n");
+            UART_send_message("    COMMANDES: pas de paramètre\n");
         } else if (i == S2A_FCT_MAX_INDEX + 1) {
-            info("    FONCTIONs: utilise les variables passé précédemment comme argument\n");
+            UART_send_message("    FONCTIONs: utilise les variables passé précédemment comme argument\n");
         }
 
-        info("%-20s%s\n", s2a_keys[i], s2a_keys_help[i]);
+        sprintf(buff, "%-20s%s\n", s2a_keys[i], s2a_keys_help[i]);
+        UART_send_message(buff,strlen(buff));
 
         // séparation des partie
         if ((i == S2A_VAL_MAX_INDEX) || (i == S2A_CMD_MAX_INDEX)) {
-            info("\n");
+            UART_send_message("\n");
         }
     }
 
-    info("\nRemarque: les espaces et les tabulations sont ignorées dans"
+    UART_send_message("\nRemarque: les espaces et les tabulations sont ignorées dans"
                 "les commandes.\n");
-    info("-------------------------------\n\n");
+    UART_send_message("-------------------------------\n\n");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
