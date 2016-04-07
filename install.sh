@@ -1,38 +1,39 @@
-PACMAN="sudo pacman -S --needed"
-YAOURT="yaourt      -S --needed"
-
-########## Mise à jour 
-#sudo pacman-mirrors -g
-sudo pacman -Suuyy
-
-if [[ ! `which yaourt` ]]; then
-	echo "Erreur, il faut installer Yaourt pour installer les paquets utiles !"
-fi
-yaourt -Suya
 
 ########## Desktop
-#$PACMAN gnome-terminal meld gnome-calculator baobab
-#$YAOURT sublime-text-dev
+PACMAN_PKG+=' gnome-terminal meld gnome-calculator  baobab zsh zsh-completions'
+
+AUR_PKG+=' sublime-text-dev oh-my-zsh-git'
 
 ########## Méca
-$PACMAN openscad 
-$YAOURT repetier-host
+PACMAN_PKG+=' openscad'
+AUR_PKG+=' repetier-host'
 
 ########## Électronique
-##TODO à vérifier
-$YAOURT kicad-bzr kicad-pretty-git kicad-docs-bzr kicad-library-bzr 
+PACMAN_PKG+=' kicad kicad-library'
 
 ########## Compilation + git
-$PACMAN gcc gdb git 
-$PACMAN sdl sdl_image soil
+PACMAN_PKG+=' gcc gdb git'
 
 
 ########## uContrôleurs
-$PACMAN picocom #arduino
+PACMAN_PKG+=' picocom' #arduino
 
 # STM32
-$YAOURT stm32cubef4 arm-none-eabi-binutils arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib
+AUR_PKG+=' stm32cubef4 arm-none-eabi-binutils arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib'
 
 
 # PIC
-$YAOURT xc16-toolchain-bin pk2cmd-plus 
+#$YAOURT xc16-toolchain-bin pk2cmd-plus
+
+sudo pacman -S --needed $PACMAN_PKG
+
+if [[ ! `which yaourt` ]]; then
+    echo "Erreur, il faut installer Yaourt pour installer les paquets utiles !"
+else
+    yaourt -S --needed --noconfirm $AUR_PKG
+fi
+
+
+# Zshrc
+cp /usr/share/oh-my-zsh/zshrc ~/.zshrc
+
