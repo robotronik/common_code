@@ -2,8 +2,6 @@ PROJECT=communication
 default: all
 # Default Options
 export ARCH  ?= stm32f407
-export ROBOT ?= gros
-export SDL   ?= yes
 export DEBUG ?= _WARNING_
 
 PARENT_DIR = ../../
@@ -11,8 +9,7 @@ PARENT_DIR = ../../
 
 
 
-
-include $(PARENT_DIR)/hardware/common.mk
+include $(PARENT_DIR)/hardware/common.rules
 ################################################################################
 # Fichiers du projet
 
@@ -23,6 +20,7 @@ COMM_STRAT_FILE = a2s_reception $(COMMON)
 ################################################################################
 # Compilation
 
+# Règles de compilation de la "librairie communication"
 all: libCommAsser libCommStrat
 .PHONY: _libCommAsser _libCommStrat
 
