@@ -40,6 +40,7 @@ int init_reception(callback_t *_callbacks) {
     return 0;
 }
 
+
 int get_received_value() {
     return received_value;
 }
@@ -65,7 +66,7 @@ void lecture_message(char current_char) {
                     debug(_ERROR_, "Erreur, clé non trouvée\n");
 
                 if (ret >= KEYS_SIZE)
-                    debug(_ERROR_, "Erreur, clé inconnue: %d\n", ret);
+                    debug(_ERROR_, "Erreur, clé non trouvée : %d\n", ret);
 
                 communication_help();
                 if (is_end(current_char))
@@ -75,9 +76,9 @@ void lecture_message(char current_char) {
             }
 
             if (ret >= 0) {
-                reset_search(&sk);
                 received_key = ret;
                 debug(_DEBUG_, "Clé trouvée : %s\n", keys[received_key]);
+                reset_search(&sk);
 
                 if (received_key <= VAL_MAX_INDEX) {
                     // Now we have to read the value
@@ -100,10 +101,14 @@ void lecture_message(char current_char) {
         case WAIT_VALUE:
             current_state = lecture_val(current_char, &received_value,
                     current_state, WAIT_KEY, WAIT_NEW_LINE);
+            if (current_state == WAIT_KEY) {
+                // We can call the callback !
+                if (callbacks[received_key])
+                    callbacks[received_key]();
+            }
             break;
 
         case WAIT_NEW_LINE:
-        {
             // On attend la fin de la trame
             debug(_DEBUG_, "Attente de la fin de la trame\n");
 
@@ -113,16 +118,11 @@ void lecture_message(char current_char) {
                 reset_search(&sk);
                 current_state = WAIT_KEY;
             }
-        }
             break;
 
 
         default:
-        {
             debug(_ERROR_, "Le message n'a pas été reconnu");
-        }
             break;
     }
-
-
 }
