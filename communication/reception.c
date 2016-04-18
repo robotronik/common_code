@@ -6,14 +6,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../hardware/debug.h"
+#include <debug.h>
 
-#include "text_reception.h"
+#include "reception.h"
 
 
-bool is_end(char c)
-{
-    return (c == '\n') || (c == '\r') || (c == '\0');
+bool is_end(char c) {
+    return (c == '\n')
+        || (c == '\r')
+        || (c == '\0');
+}
+
+bool is_whitespace(char c) {
+    return (c == ' ')
+        || (c == '\t');
 }
 
 void reset_search(struct search_key_t *sk)
@@ -46,13 +52,13 @@ int search_key(char c, struct search_key_t *sk)
                     return i;
                 }
                 // On comptabilise le nombre de clé encore valide
-                ret --;
+                ret ++;
             }
         }
     }
 
     sk->index++;
-    return ret - 1;
+    return - ret - 1;
 }
 
 int read_string(char c, int *index, char *str, int size_str)
@@ -101,16 +107,7 @@ int read_unsigned(char c, int *val)
     return 0;
 }
 
-void prepare_current_char(char *current_char)
-{
-    // on ne tient pas compte de la casse
-    *current_char = tolower(*current_char);
-}
 
-bool is_whitespace(char c)
-{
-    return (c == ' ') || (c == '\t');
-}
 
 int lecture_val(char c, int *val, int state_lecture, int state_found, int state_error)
 {
@@ -121,7 +118,7 @@ int lecture_val(char c, int *val, int state_lecture, int state_found, int state_
     debug(_VERBOSE_, "lecture entier\n");
 
     if(is_whitespace(c)) {
-        debug(_DEBUG_, "espace ignoré durant la lecture d'une valeure\n");
+        debug(_DEBUG_, "espace ignoré durant la lecture d'une valeur\n");
         return state_lecture;
     }
 
@@ -139,11 +136,11 @@ int lecture_val(char c, int *val, int state_lecture, int state_found, int state_
     }
 
     int ret = read_unsigned(c, val);
-    debug(_VERBOSE_, "valeure en cour de lecture: %d\n", *val);
+    debug(_VERBOSE_, "valeur en cours de lecture: %d\n", *val);
 
     // la récéption n'est pas fini, on reste dans le même état
     if (ret == 0) {
-        debug(_VERBOSE_, "reception en cour\n");
+        debug(_VERBOSE_, "reception en cours\n");
         return state_lecture;
     }
 
@@ -152,7 +149,7 @@ int lecture_val(char c, int *val, int state_lecture, int state_found, int state_
         if (is_neg_number) {
             *val = -*val;
         }
-        debug(_DEBUG_, "reception terminé\n");
+        debug(_DEBUG_, "reception terminée\n");
         debug(_DEBUG_, "valeur: %d\n", *val);
 
         // On se prépare à recevoir une nouvelle trame
@@ -165,4 +162,34 @@ int lecture_val(char c, int *val, int state_lecture, int state_found, int state_
     else {
         return state_error;
     }
+}
+
+
+#include "keys.h"
+
+void communication_help() {
+    UART_send_message("\n-------------------------------\n");
+    UART_send_message("Liste des commandes supportées:\n\n");
+
+    char buff[100];
+
+    for (int i = 0; i < KEYS_SIZE; i++) {
+        if (i == 0)
+            UART_send_message("\tVARIABLES: attends un entier (pouvant être précédé d'un `-`) en paramètre\n");
+         else if (i == VAL_MAX_INDEX + 1)
+            UART_send_message("\tCOMMANDES: pas de paramètres\n");
+
+
+        sprintf(buff, "%-20s%s\n", keys[i], keys_help[i]);
+        UART_send_message(buff);
+
+        // séparation des partie
+        if (i == VAL_MAX_INDEX) {
+            UART_send_message("\n");
+        }
+    }
+
+    UART_send_message("\nRemarque: les espaces et les tabulations sont ignorées dans"
+                "les commandes.\n");
+    UART_send_message("-------------------------------\n\n");
 }

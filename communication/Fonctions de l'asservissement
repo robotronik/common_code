@@ -1,0 +1,86 @@
+// Fonctions de l'asservissement
+
+
+
+
+int get_pos() {
+    send_val(a2s_keys[A2S_VAL_X],get_x_actuel());
+    send_val(a2s_keys[A2S_VAL_Y],get_y_actuel());
+    send_val(a2s_keys[A2S_VAL_THETA],get_theta_actuel());
+    send_fonction(a2s_keys[A2S_CMD_SEND_POS]);
+
+    return 0;
+}
+
+
+int cmd_emergency_stop() {
+    set_trajectoire_emergency_stop();
+    return 0;
+}
+
+int cmd_stop() {
+    set_trajectoire_stop();
+    return 0;
+}
+
+
+int cmd_stop() {
+    set_trajectoire_alpha_delta(alpha, delta);
+    return 0;
+}
+
+
+    set_trajectoire_xy_relatif(x, y);
+
+    set_trajectoire_xy_absolu(x, y);
+
+    set_trajectoire_theta(theta);
+
+    add_point(x, y, &chemin);
+
+    efface_chemin(&chemin);
+
+    add_point(x, y, &chemin);
+    debug(_DEBUG_, "Envoie du chemin\n");
+    for (int i = 0; i < chemin.taille; i++) {
+        debug(_DEBUG_, "    %d, %d\n", chemin.point[i].x, chemin.point[i].y);
+    }
+    set_trajectoire_chemin(chemin);
+    efface_chemin(&chemin);
+
+    debug(_DEBUG_, "utilisation du mode tendu\n");
+    set_trajectoire_mode(tendu);
+
+    set_trajectoire_mode(courbe);
+    debug(_DEBUG_, "utilisation du mode courbe\n");
+
+    set_x_actuel(x);
+    set_y_actuel(y);
+    set_theta_actuel(theta);
+
+    set_kp_delta(kp_delta);
+    set_kd_delta(kd_delta);
+    set_kp_alpha(kp_alpha);
+    set_kd_alpha(kd_alpha);
+
+
+
+
+
+void add_point(int x, int y, s_liste *chemin)
+{
+    debug(_DEBUG_, "ajout du point %d, %d\n", x, y);
+    if (chemin->taille >= MAX_POSITIONS) {
+        debug(_ERROR_, "\nAttention, le chemin est **trop long**. Point ignoré\n");
+        return;
+    }
+    chemin->point[chemin->taille].x = x;
+    chemin->point[chemin->taille].y = y;
+    chemin->taille++;
+}
+
+void efface_chemin(s_liste *chemin)
+{
+    debug(_DEBUG_, "chemin effacé\n");
+    chemin->taille = 0;
+}

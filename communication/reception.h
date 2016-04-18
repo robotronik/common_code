@@ -1,5 +1,5 @@
-#ifndef TEXT_RECEPTION_H
-#define TEXT_RECEPTION_H
+#ifndef COMMUNICATION_RECEPTION_H
+#define COMMUNICATION_RECEPTION_H
 
 #include <stdbool.h>
 
@@ -23,6 +23,16 @@ struct search_key_t {
     char **keys;           ///< tableaux contenant les clés à rechercher
     bool *to_search;       ///< il faut chercher keys[i] si to_search[i] == true
 };
+
+
+// Retourne true si [c] est un caractère de fin (\0, \r ou \n)
+bool is_end(char c);
+// Retourne true si [c] est un caractère blanc (espace ou tab)
+bool is_whitespace(char c);
+
+// Prépare le caractère à gérer (tolower)
+void prepare_current_char(char *current_char);
+
 
 /** prépare [sk] pour une nouvelle recherche
  */
@@ -60,10 +70,7 @@ int read_string(char c, int *index, char *str, int size_str);
  */
 int read_unsigned(char c, int *val);
 
-/** Return true si [c] est un caractère de find de ligne ou de fichier (\0, \r
- * et \n)
- */
-bool is_end(char c);
+
 
 /**
  * Traitement à effectuer l'analyse d'un caractère lors de la reception
@@ -72,10 +79,6 @@ bool is_end(char c);
  */
 void prepare_current_char(char *current_char);
 
-/**
- * Renvoie `true` si `c` est un caractère blanc (espace ou tab)
- */
-bool is_whitespace(char c);
 
 /*
  * Lecture d'une valeure
@@ -90,4 +93,9 @@ bool is_whitespace(char c);
  */
 int lecture_val(char c, int *val, int state_lecture, int state_found, int state_error);
 
-#endif /* TEXT_RECEPTION_H */
+
+void communication_help();
+
+
+
+#endif /* COMMUNICATION_RECEPTION_H */
