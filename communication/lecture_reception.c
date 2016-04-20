@@ -8,55 +8,34 @@
 
 #include <debug.h>
 #include "lecture_reception.h"
-#include "reception.h"
 
 
-typedef enum {
-    WAIT_KEY,
-    WAIT_VALUE,
-    WAIT_NEW_LINE,
-} e_a2s_state;
+void init_reception(Reception_object *values, callback_t *_callbacks) {
+    values->current_state = WAIT_KEY;
+    values->sk.nb_keys = KEYS_SIZE;
+    values->sk.keys=keys;
+    values->sk.to_search=values->to_search;
+    reset_search(&values->sk);
 
-callback_t callbacks[KEYS_SIZE];
+    values->received_value = 0;
+    values->received_value_is_negative = false;
+    values->received_value_first_char  = true;
 
-// Les valeurs reçues
-e_communication_keys received_key;
-int received_value = 0;
-
-
-e_a2s_state current_state = WAIT_KEY;
-bool to_search [KEYS_SIZE];
-struct search_key_t sk = {
-    0,
-    KEYS_SIZE,
-    keys,
-    to_search
-};
-
-int init_reception(callback_t *_callbacks) {
-    *callbacks = *_callbacks;
-
-    reset_search(&sk);
-    return 0;
+    values->callbacks = _callbacks;
 }
 
 
-int get_received_value() {
-    return received_value;
-}
-
-
-void lecture_message(char current_char) {
+void lecture_message(char current_char, Reception_object *values) {
     // On ignore toujours les espaces
     if(is_whitespace(current_char))
         return;
 
     debug(_DEBUG_, "\n\nCaractère lu : %c\n", current_char);
 
-    switch (current_state) {
-        case WAIT_KEY:
+    switch (values->current_state) {
+        case WAIT_KEY:  // On est en train de lire la clé
         {
-            int ret = search_key(current_char, &sk);
+            int ret = search_key(current_char, &(values->sk));
 
             if (ret == -1
              || ret >= KEYS_SIZE
@@ -70,26 +49,26 @@ void lecture_message(char current_char) {
 
                 communication_help();
                 if (is_end(current_char))
-                    current_state = WAIT_KEY;
+                    values->current_state = WAIT_KEY;
                 else
-                    current_state = WAIT_NEW_LINE;
+                    values->current_state = WAIT_NEW_LINE;
             }
 
             if (ret >= 0) {
-                received_key = ret;
-                debug(_DEBUG_, "Clé trouvée : %s\n", keys[received_key]);
-                reset_search(&sk);
+                values->received_key = ret;
+                debug(_DEBUG_, "Clé trouvée : %s\n", keys[values->received_key]);
+                reset_search(&(values->sk));
 
-                if (received_key <= VAL_MAX_INDEX) {
+                if (values->received_key <= VAL_MAX_INDEX) {
                     // Now we have to read the value
-                    received_value = 0;
-                    current_state = WAIT_VALUE;
+                    values->received_value = 0;
+                    values->current_state = WAIT_VALUE;
                 } else {
                     // We can call the callback !
-                    if (callbacks[received_key])
-                        callbacks[received_key]();
+                    if (values->callbacks[values->received_key])
+                        values->callbacks[values->received_key]();
                     // Now we will wait for the end of the line
-                    current_state = WAIT_NEW_LINE;
+                    values->current_state = WAIT_NEW_LINE;
                 }
 
             } else {
@@ -98,25 +77,25 @@ void lecture_message(char current_char) {
         }
             break;
 
-        case WAIT_VALUE:
-            current_state = lecture_val(current_char, &received_value,
-                    current_state, WAIT_KEY, WAIT_NEW_LINE);
-            if (current_state == WAIT_KEY) {
+        case WAIT_VALUE:    // On est en train de lire la valeur qui suit la clé
+            values->current_state = lecture_val(current_char, &(values->received_value),
+                        &(values->received_value_is_negative), &(values->received_value_first_char));
+            if (values->current_state == WAIT_KEY) {
                 // We can call the callback !
-                if (callbacks[received_key])
-                    callbacks[received_key]();
+                if (values->callbacks[values->received_key])
+                    values->callbacks[values->received_key]();
             }
             break;
 
-        case WAIT_NEW_LINE:
+        case WAIT_NEW_LINE: // On a fini de tout lire, on attend la fin
             // On attend la fin de la trame
             debug(_DEBUG_, "Attente de la fin de la trame\n");
 
             if (is_end(current_char)) {
                 // On se prépare à recevoir une nouvelle trame
                 debug(_DEBUG_, "Fin de trame trouvé\n");
-                reset_search(&sk);
-                current_state = WAIT_KEY;
+                reset_search(&(values->sk));
+                values->current_state = WAIT_KEY;
             }
             break;
 

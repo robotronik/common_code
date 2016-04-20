@@ -25,6 +25,12 @@ struct search_key_t {
 };
 
 
+typedef enum {
+    WAIT_KEY,
+    WAIT_VALUE,
+    WAIT_NEW_LINE,
+} e_a2s_state;
+
 // Retourne true si [c] est un caractère de fin (\0, \r ou \n)
 bool is_end(char c);
 // Retourne true si [c] est un caractère blanc (espace ou tab)
@@ -53,32 +59,6 @@ void reset_search(struct search_key_t *sk);
  */
 int search_key(char c, struct search_key_t *sk);
 
-/** Lit une chaine de caractère
- * Aucun '\0' final n'est ajouté
- * index est automatiquement incrémenté.
- * return -1 en cas de buffer overflow (et *index = size_str)
- * return 0 si la réception n'est pas terminée
- * return index (= la taille de la chaine de charactères) si la chaine est complete
- */
-int read_string(char c, int *index, char *str, int size_str);
-
-/** Lit un entier
- * return 0 tant que la réception n'est pas terminée
- * return >0 quand la reception est terminée
- * return -1 en cas d'overflow
- * return -2 si l'entrée n'est pas un nombre
- */
-int read_unsigned(char c, int *val);
-
-
-
-/**
- * Traitement à effectuer l'analyse d'un caractère lors de la reception
- *
- * Pour simplifier le traitement, le protocole n'est pas sensible à la casse
- */
-void prepare_current_char(char *current_char);
-
 
 /*
  * Lecture d'une valeure
@@ -91,7 +71,7 @@ void prepare_current_char(char *current_char);
  * \return state_error en cas d'erreur
  * \return state_current sinon (réception non terminée).
  */
-int lecture_val(char c, int *val, int state_lecture, int state_found, int state_error);
+int lecture_val(char c, int *val, bool *is_neg_number, bool *first_char);
 
 
 void communication_help();

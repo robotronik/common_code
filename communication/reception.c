@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #include <debug.h>
 
@@ -24,9 +25,8 @@ bool is_whitespace(char c) {
 
 void reset_search(struct search_key_t *sk)
 {
-    for (int i = 0; i < sk->nb_keys; i++) {
+    for (int i = 0; i < sk->nb_keys; i++)
         sk->to_search[i] = true;
-    };
     sk->index = 0;
 }
 
@@ -61,107 +61,54 @@ int search_key(char c, struct search_key_t *sk)
     return - ret - 1;
 }
 
-int read_string(char c, int *index, char *str, int size_str)
-{
-    if (is_end(c)) {
-        debug(_VERBOSE_, "new_line\n");
-        debug(_VERBOSE_, "return : %d\n", *index);
-        return *index;
-    }
-
-    if (*index >= size_str) {
-        debug(_VERBOSE_, "buffer overflow\n");
-        return -1;
-    }
-
-    debug(_VERBOSE_, "read_string : %c\n", c);
-    str[*index] = c;
-    *index = *index + 1;
-    debug(_VERBOSE_, "index : %d\n", *index);
-    return 0;
-}
-
-int read_unsigned(char c, int *val)
-{
-    if (is_end(c)) {
-        debug(_VERBOSE_, "new_line\n");
-        return 1;
-    }
-
-    // On s'assure qu'on a reçu un nombre
-    if ((c < '0') || (c > '9')) {
-        debug(_ERROR_, "erreur, %c n'est pas un nombre\n", c);
-        return -2;
-    }
-
-    int pre_val = *val;
-    *val *= 10;
-    *val += c - '0';
-
-    // overflow
-    if (*val < pre_val) {
-        debug(_ERROR_, "overflow lors de la lecture d'un nombre");
-        return -1;
-    }
-
-    return 0;
-}
-
-
-
-int lecture_val(char c, int *val, int state_lecture, int state_found, int state_error)
-{
-    static bool is_neg_number;
-    static bool first_char = true;
+int lecture_val(char c, int *val, bool *is_neg_number, bool *first_char) {
 
     // Lecture d'un entier
     debug(_VERBOSE_, "lecture entier\n");
 
-    if(is_whitespace(c)) {
-        debug(_DEBUG_, "espace ignoré durant la lecture d'une valeur\n");
-        return state_lecture;
-    }
-
-    if (first_char) {
+    if (*first_char) {
         *val = 0;
-        is_neg_number = false;
-        first_char = false;
+        *is_neg_number = false;
+        *first_char = false;
 
         // On regarde si le nombre est négatif (ce doit être le premier caractère)
         if (c == '-') {
             debug(_DEBUG_, "Le nombre est négatif\n");
-            is_neg_number = true;
-            return state_lecture;
+            *is_neg_number = true;
+            return WAIT_VALUE;
         }
     }
 
-    int ret = read_unsigned(c, val);
-    debug(_VERBOSE_, "valeur en cours de lecture: %d\n", *val);
 
-    // la récéption n'est pas fini, on reste dans le même état
-    if (ret == 0) {
-        debug(_VERBOSE_, "reception en cours\n");
-        return state_lecture;
-    }
-
-    // reception terminée
-    else if (ret > 0) {
-        if (is_neg_number) {
+    if (is_end(c)) {
+        // Réception terminée
+        if (*is_neg_number)
             *val = -*val;
-        }
-        debug(_DEBUG_, "reception terminée\n");
+
+        debug(_DEBUG_, "réception terminée\n");
         debug(_DEBUG_, "valeur: %d\n", *val);
 
         // On se prépare à recevoir une nouvelle trame
-        first_char = true;
-        is_neg_number = false;
-        return state_found;
+        *first_char = true;
+        return WAIT_KEY;
     }
 
-    // il y a eu des erreurs de reception
-    else {
-        return state_error;
+
+    if ((c < '0') || (c > '9')) {
+        debug(_ERROR_, "erreur, %c n'est pas un nombre\n", c);
+        return WAIT_NEW_LINE;
     }
+    if (*val > INT_MAX/10) {
+        debug(_ERROR_, "overflow lors de la lecture d'un nombre\n");
+        return WAIT_NEW_LINE;
+    }
+
+
+    *val = (*val * 10) + (c - '0');
+
+    debug(_VERBOSE_, "réception en cours\n");
+    debug(_VERBOSE_, "valeur en cours de lecture: %d\n", *val);
+    return WAIT_VALUE;
 }
 
 
