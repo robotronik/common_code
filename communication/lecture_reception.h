@@ -2,7 +2,6 @@
 #define COMMUNICATION_LECTURE_RECEPTION
 
 #include "keys.h"
-
 #include "reception.h"
 
 typedef struct {
@@ -23,12 +22,20 @@ typedef struct {
 
 } Reception_object;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 void init_reception(Reception_object *values, callback_t *_callbacks);
 
-
 // The main function to call at each received char
 void lecture_message(char current_char, Reception_object *values);
+
+
+#ifdef __cplusplus
+{
+#endif
 
 
 #endif
