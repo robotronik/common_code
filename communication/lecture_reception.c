@@ -22,6 +22,7 @@ void init_reception(Reception_object *values, callback_t *_callbacks) {
     values->received_value_first_char  = true;
 
     values->callbacks = _callbacks;
+    _callbacks[CMD_HELP] = communication_help;
 }
 
 
@@ -48,7 +49,6 @@ void lecture_message(char current_char, Reception_object *values) {
                 if (ret >= KEYS_SIZE)
                     debug(_ERROR_, "Erreur, clé non trouvée : %d\n", ret);
 
-                communication_help();
                 if (is_end(current_char))
                     values->current_state = WAIT_KEY;
                 else
