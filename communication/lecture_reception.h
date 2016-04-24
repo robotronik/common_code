@@ -34,7 +34,7 @@ void lecture_message(char current_char, Reception_object *values);
 
 
 #ifdef __cplusplus
-{
+}
 #endif
 
 
