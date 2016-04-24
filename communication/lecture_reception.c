@@ -30,7 +30,8 @@ void lecture_message(char current_char, Reception_object *values) {
     if(is_whitespace(current_char))
         return;
 
-    debug(_DEBUG_, "\n\nCaractère lu : %c\n", current_char);
+    debug(_DEBUG_, "\n");
+    debug(_DEBUG_, "Caractère lu : %c\n", current_char);
 
     switch (values->current_state) {
         case WAIT_KEY:  // On est en train de lire la clé
