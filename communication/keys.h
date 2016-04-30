@@ -1,7 +1,7 @@
 #ifndef COMMUNICATION_KEYS_H
 #define COMMUNICATION_KEYS_H
 
-typedef int (*callback_t) (void);
+typedef void (*callback_t) (void);
 
 typedef enum {
     //// Ces fonctions attendent une valeur entière
