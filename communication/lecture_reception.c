@@ -11,6 +11,9 @@
 
 
 void init_reception(Reception_object *values, callback_t *_callbacks) {
+    if (values == 0 || _callbacks == 0)
+        return;
+
     values->current_state = WAIT_KEY;
     values->sk.nb_keys = KEYS_SIZE;
     values->sk.keys=keys;
