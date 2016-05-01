@@ -42,6 +42,9 @@ char *keys[KEYS_SIZE] = {
     [CMD_QUIT]          = "quit",
     [CMD_HELP]          = "?",
 
+    [CMD_LOCK]          = "lock",
+    [CMD_UNLOCK]        = "unlock",
+
     [CMD_STOP]          = "stop",
     [CMD_EMERGENCY_STOP]= "estop",
 
@@ -86,6 +89,9 @@ char *keys_help[KEYS_SIZE] = {
     [CMD_SEND_POS]      = "fin de réception de x, y et theta",
     [CMD_QUIT]          = "quitter la simulation",
     [CMD_HELP]          = "affiche l'aide",
+
+    [CMD_LOCK]          = "lock",
+    [CMD_UNLOCK]        = "unlock",
 
     [CMD_STOP]          = "arrêt",
     [CMD_EMERGENCY_STOP]= "arrêt d'urgence",

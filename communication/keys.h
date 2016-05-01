@@ -43,6 +43,9 @@ typedef enum {
     CMD_QUIT,       // q    : quite la simulation
     CMD_HELP,       // ?    : affiche l'aide
 
+    CMD_LOCK,       // On met en pause l'asservissement
+    CMD_UNLOCK,
+
     CMD_STOP,           // arrêt
     CMD_EMERGENCY_STOP, // arrêt d'urgence
 
